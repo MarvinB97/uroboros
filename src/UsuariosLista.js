@@ -1,0 +1,98 @@
+export const usuariosList = [{
+    username: '',
+    password: '',
+    nombres: '',
+    apellidos: '',
+    tipoDoc: '',
+    documento: '',
+    genero: '',
+    rol: '',
+    foto: '',
+    adress: '',
+    celular: ''
+  },{
+    username: 'MaCa',
+    password: 'MaCa1',
+    nombres: 'Maria',
+    apellidos: 'Castañeda',
+    tipoDoc: 'cc',
+    documento: '2378472983',
+    genero: 'F',
+    rol: 'Gerente',
+    foto: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPkIM2kagRcOjUu29VKseE7bbDtSzFUmBAp-EAYCbliA&s',
+    adress: 'cr 41f 50-26',
+    celular: '323448553'
+  }, {
+    username: 'EduCa',
+    password: 'EduCa2',
+    nombres: 'Eduardo',
+    apellidos: 'Catalano',
+    tipoDoc: 'cc',
+    documento: '1378372953',
+    genero: 'M',
+    rol: 'Director',
+    foto: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEZsKQlscIcVddHeuxNT9LPwz_xE6WoBfZvjYwQFSj_A&s',
+    adress: 'cr 42a 50-26',
+    celular: '323118553'
+  }, {
+    username: 'JoWo',
+    password: 'JoWo3',
+    nombres: 'John',
+    apellidos: 'Woodrow Wilson',
+    tipoDoc: 'cc',
+    documento: '2366372983',
+    genero: 'M',
+    rol: 'Capataz',
+    foto: 'https://img.freepik.com/foto-gratis/hombre-feliz-pie-playa_107420-9868.jpg?1',
+    adress: 'cr 43b 50-26',
+    celular: '323228553'
+  }, {
+    username: 'NiPha',
+    password: 'NiPha4',
+    nombres: 'Niki de Saint',
+    apellidos: 'Phalle',
+    tipoDoc: 'cc',
+    documento: '1313372983',
+    genero: 'F',
+    rol: 'Director',
+    foto: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1iYsMGF0AdeJ97opZ3KIC8CHWrLrBbI-Fb_VaDSxFTw&s',
+    adress: 'cr 44c 50-26',
+    celular: '323448553'
+  }, {
+    username: 'BarHe',
+    password: 'BarHe5',
+    nombres: 'Barbara',
+    apellidos: 'Hepworth',
+    tipoDoc: 'cc',
+    documento: '2378472977',
+    genero: 'F',
+    rol: 'Capataz',
+    foto: 'https://vivolabs.es/wp-content/uploads/2022/03/perfil-mujer-vivo.png',
+    adress: 'cr 45d 50-26',
+    celular: '323558553'
+  }, {
+    username: 'LaOl',
+    password: 'LaOl6',
+    nombres: 'Lamidi',
+    apellidos: 'Olonade Fakeye',
+    tipoDoc: 'cc',
+    documento: '2378462599',
+    genero: 'F',
+    rol: 'Capataz',
+    foto: 'https://media.istockphoto.com/id/1311858467/es/foto/retrato-de-foto-de-la-cabeza-atractiva-joven-india-mirando-a-la-c%C3%A1mara.jpg?s=612x612&w=0&k=20&c=80UEy1HsGwvtWGvRu2JHlqmligOVritOSFKyQBT1ZwU=',
+    adress: 'cr 47j 50-26',
+    celular: '323668553'
+  }, {
+    username: 'AlSz',
+    password: 'AlSz7',
+    nombres: 'Alina',
+    apellidos: 'Szapocznikow',
+    tipoDoc: 'cc',
+    documento: '2301472983',
+    genero: 'F',
+    rol: 'Capataz',
+    foto: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6p25MKaq9xe_fovKe2O1TXVdmjTwOIBKeVWzS1AnDhA&s',
+    adress: 'cr 48p 50-26',
+    celular: '323778553'
+  }];
+  
