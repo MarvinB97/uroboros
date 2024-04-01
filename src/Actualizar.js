@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+//actualizar
+
 export default function Actualizar() {
   const [person, setPerson] = useState({
     firstName: '',
