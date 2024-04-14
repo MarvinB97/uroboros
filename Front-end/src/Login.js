@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {usuariosList} from './UsuariosLista.js'; // Importa el archivo de datos
+import axios from 'axios';
 
 
 import LoginColumnOne from './LoginColumnOne.js';
@@ -49,6 +50,20 @@ const Form = () => {
   usu = username;
 
 const handleLogin = (e) => {
+
+// Aquí puedes hacer una petición POST para enviar los datos a un servidor
+// axios.post
+// axios.post('http://localhost:4000/login', { username, password })
+//   .then(response => {
+//     console.log('Respuesta del servidor:', response.data);
+//   })
+//   .catch(error => {
+//     console.error('Error al iniciar sesión:', error);
+//   });
+
+// Mañana me encargo de hacer el back para que verifique el usuario en el back
+// Atte: @iMrStevenS2
+
   e.preventDefault();
   const user = usuariosList.find(u => u.username === username && u.password === password);
   if (user) {
