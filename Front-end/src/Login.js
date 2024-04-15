@@ -62,32 +62,52 @@ const Form = () => {
 
   usu = username;
 
+/**
+   * Función que se ejecuta al enviar el formulario
+   * Se mmodificó la funcion original para que se conecte con la base de datos
+   * y verifique si el usuario existe o no
+   * @param {event} e Evento del formulario
+   * @returns {void}
+   * @iMrStevenS2
+   */
 const handleLogin = (e) => {
-
-// Aquí puedes hacer una petición POST para enviar los datos a un servidor
-// axios.post
-// axios.post('http://localhost:4000/login', { username, password })
-//   .then(response => {
-//     console.log('Respuesta del servidor:', response.data);
-//   })
-//   .catch(error => {
-//     console.error('Error al iniciar sesión:', error);
-//   });
-
-// Mañana me encargo de hacer el back para que verifique el usuario en el back
-// Atte: @iMrStevenS2
-
   e.preventDefault();
-  const user = usuariosList.find(u => u.username === username && u.password === password);
-  if (user) {
-    // Usuario autenticado, puedes redirigirlo a otra página o mostrar un mensaje de éxito
-    console.log('Usuario autenticado:', user);
-    setError('');
-    // Redirige a la pantalla de bienvenida después del inicio de sesión
-    navigate('/profile');
+
+  const url = "http://localhost:8000/login";
+  const data = { username, password };
+  // console.log("Datos a enviar:", data);
+
+  if (username === "" || password === "") {
+    setError("Por favor, rellena todos los campos");
+    return;
   } else {
-    setError('Nombre de usuario o contraseña incorrectos');
+    axios
+      .post(url, data)
+      .then((response) => {
+        console.log("Respuesta del servidor:", response);
+        // setWebResponse(response);
+        if (
+          response.request.status === 200 &&
+          response.request.statusText === "OK"
+        ) {
+          // Usuario autenticado, puedes redirigirlo a otra página o mostrar un mensaje de éxito
+          // // console.log("Usuario autenticado:", response.data.user.username);
+
+          // Redirige a la pantalla de bienvenida después del inicio de sesión
+          setError("");
+          navigate("/profile");
+        }
+      })
+      .catch((error) => {
+        console.log("Error al iniciar sesión:", error);
+        // setWebError(error);
+        setError("Nombre de usuario o contraseña incorrectos");
+      });
+
   }
+
+  // Con ésto, se realiza la redireccón dependiendo de la respuesta por parte del servidor
+  // Atte: @iMrStevenS2
 };
 
 return (

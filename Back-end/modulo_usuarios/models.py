@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Persona(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    nombre = models.CharField(max_length=50)
-    apellido = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50) #      Se Puede comentar, viene por defecto en la clase User de Django
+    apellido = models.CharField(max_length=50) #    Se Puede comentar, viene por defecto en la clase User de Django
     identificacion = models.CharField(max_length=10)
     # cargo = models.CharField(max_length=50)
     edad = models.IntegerField()
