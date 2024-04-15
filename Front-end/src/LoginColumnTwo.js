@@ -1,7 +1,13 @@
+/*
+*------------------SE IMPORTA EL LOGO-----------------
+*/
 import star from './star.png';
 import logo from './logo2.png';
 
 
+/*
+*------------------FUNCION PRINCIPAL-----------------
+*/
 export default function LoginColumnTwo(){
     return (
         <div className='content-ColumnTwo'>
