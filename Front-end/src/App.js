@@ -5,6 +5,9 @@ import './App.css';
 
 import Login from './Login.js';
 import Profile from './Profile.js';
+import Actualizar from './Actualizar.js';
+import AcercaDeNosotros from './AcercaDeNosotros.js';
+import Signin from './Signin.js';
 
 
 const App = () => {
@@ -14,6 +17,9 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Login/>}/>
             <Route path="/profile" element={<Profile/>}/>
+            <Route path="/signin" element={<Signin/>}/>
+            <Route path="/actualizar" element={<Actualizar/>}/>
+            <Route path="/acerca-de-nosotros" element={<AcercaDeNosotros/>}/>
           </Routes>
         </Router>
     </div>
