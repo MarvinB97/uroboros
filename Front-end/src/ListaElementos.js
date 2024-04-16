@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
 
 let estilo_button_Editar = {
   display: "inline",
@@ -23,22 +24,46 @@ let estilo_button_Eliminar = {
 };
 let estilo_li = { width: "100%" };
 let estilo_button_Add = {
-  width: "20%",
+  width: "60%",
   fontSize: "15px",
   backgroundColor: "rgb(20, 65, 241)",
   color: "white",
   border: "0.1px solid rgb(100, 100, 100)",
   borderRadius: "10px",
+  padding: "2px",
+  marginRigth: "10%",
+  TextAlign: "center",
+  
 };
 
 class ListaElementos extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [], // Almacenará los elementos
-      currentItem: "", // El elemento actual que se está editando o agregando
+      items: null,
     };
+
+    // this.state = {
+    //   items: [], // Almacenará los elementos
+    //   currentItem: "", // El elemento actual que se está editando o agregando
+    // };
   }
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = async () => {
+    const url = "http://localhost:8000/listar_usuarios";
+    try {
+      const response = await axios.post(url);
+
+      this.setState({
+        data: response.data,
+      });
+      // console.log(response.data);
+    } catch (error) {}
+  };
 
   // Maneja el cambio en el formulario de entrada
   handleInputChange = (event) => {
@@ -73,7 +98,7 @@ class ListaElementos extends Component {
     return (
       <>
         <ol>
-          {this.state.items.map((item, index) => (
+          {/* {data.map((item, index) => (
             <li key={index} style={estilo_li}>
               <p>
                 {item} {index + 1}
@@ -86,7 +111,7 @@ class ListaElementos extends Component {
                 <button style={estilo_button_Editar}>{"\u270E"}</button>
               </p>
             </li>
-          ))}
+          ))} */}
         </ol>
         {/* <input
           type="text"
