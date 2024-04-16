@@ -23,6 +23,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
         
+class user_token (serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = ('username', 'email', 'first_name', 'last_name', 'id') 
+        
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     pass
 
