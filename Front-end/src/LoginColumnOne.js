@@ -1,5 +1,10 @@
+//-------LIBRERIA DE FRAMEWORK PARA CSS----------
 import {UncontrolledCarousel} from 'reactstrap';
 
+
+/*
+*------------------FUNCION PRINCIPAL-----------------
+*/
 export default function LoginColumnOne(){
     return (
     <div className='content-ColumnOne'>
@@ -9,7 +14,9 @@ export default function LoginColumnOne(){
 
 
 
-
+/*
+*------------------IMAGENES DE PRESENTACION-----------------
+*/
 function Carousel(){
     return(
         <UncontrolledCarousel

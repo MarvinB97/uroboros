@@ -1,11 +1,10 @@
-import Encabezado from "./Encabezado";
-
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { Button, Form, Row, Col, FormGroup, Label, Input } from "reactstrap";
+import Encabezado from "./Encabezado";
 import { useState } from "react";
 import axios from "axios";
 
-export default function Actualizar() {
+export default function Signin() {
   const navigate = useNavigate();
   const volver = () => {
     navigate("/profile");
@@ -25,7 +24,15 @@ export default function Actualizar() {
         }
       />
 
-      <div style={{ width: "80vw", margin: "auto", marginTop: "30px" }}>
+      <div
+        style={{
+          width: "80vw",
+          margin: "auto",
+          marginTop: "30px",
+          alignSelf: "center",
+          textAlign: "center",
+        }}
+      >
         <Formulario />
       </div>
     </>
@@ -35,18 +42,18 @@ export default function Actualizar() {
 function Formulario() {
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    username: sessionStorage.getItem("username"),
-    password: sessionStorage.getItem("password"),
-    name: sessionStorage.getItem("first_name"),
-    lastName: sessionStorage.getItem("last_name"),
-    selectId: sessionStorage.getItem("selectId"),
-    document: sessionStorage.getItem("document"),
-    selectGender: sessionStorage.getItem("gender"),
-    selectRol: sessionStorage.getItem("rol"),
-    address: sessionStorage.getItem("address"),
-    tel: sessionStorage.getItem("tel"),
-    email: sessionStorage.getItem("email"),
-    check: sessionStorage.getItem("check"),
+    username: "",
+    password: "",
+    name: "",
+    lastName: "",
+    selectId: "",
+    document: "",
+    selectGender: "",
+    selectRol: "",
+    address: "",
+    tel: "",
+    email: "",
+    check: false,
   });
   const navigate = useNavigate();
 
@@ -66,8 +73,7 @@ function Formulario() {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    const url = "http://localhost:8000/actualizar_usuario";
-    // const url_persoa = "http://localhost:8000/actualizar_persona/";
+    const url = "http://localhost:8000/crear_usuario";
     const data = formData;
     console.log("Datos a enviar:", data);
 
@@ -103,7 +109,10 @@ function Formulario() {
 
             // Redirige a la pantalla de bienvenida después del inicio de sesión
             setError(response.data.message);
-            // navigate("/profile");
+            setTimeout(()=> {
+                navigate("/profile");
+               }, 1000);
+            
           }
         })
         .catch((error) => {
@@ -215,13 +224,7 @@ function Formulario() {
                 id="ejemploSelectGener"
                 name="selectGender"
                 type="select"
-                value={
-                  formData.selectGender == "Masculino"
-                    ? "M"
-                    : formData == "Femenino"
-                    ? "F"
-                    : "Otro"
-                }
+                value={formData.selectGender}
                 onChange={handleChange}
               >
                 <option>Selecione un Género</option>
@@ -301,14 +304,13 @@ function Formulario() {
             name="check"
             type="checkbox"
             style={{ display: "", margin: "2px", float: "none", width: "30px" }}
-            value={formData.check===true?true:false}
+            value={formData.check}
             onChange={() =>
               setFormData((prevState) => ({
                 ...prevState,
                 check: !prevState.check,
               }))
             }
-            checked={formData.check}
             //   onChange={handleChange}
           />
           <Label check for="exampleCheck">
@@ -316,7 +318,7 @@ function Formulario() {
           </Label>
         </FormGroup>
         <Button color="primary" onClick={handleSubmit}>
-          Actualizar
+          Sign in
         </Button>
         {error && <p>{error}</p>}
       </Form>

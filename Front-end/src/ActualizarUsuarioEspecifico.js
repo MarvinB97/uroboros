@@ -1,8 +1,9 @@
 import Encabezado from "./Encabezado";
+import { useParams } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Row, Col, FormGroup, Label, Input } from "reactstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Actualizar() {
@@ -33,26 +34,79 @@ export default function Actualizar() {
 }
 
 function Formulario() {
+  const { id } = useParams();
+  //   console.log("ID de usuario:", id);
   const [error, setError] = useState("");
-  const [formData, setFormData] = useState({
-    username: sessionStorage.getItem("username"),
-    password: sessionStorage.getItem("password"),
-    name: sessionStorage.getItem("first_name"),
-    lastName: sessionStorage.getItem("last_name"),
-    selectId: sessionStorage.getItem("selectId"),
-    document: sessionStorage.getItem("document"),
-    selectGender: sessionStorage.getItem("gender"),
-    selectRol: sessionStorage.getItem("rol"),
-    address: sessionStorage.getItem("address"),
-    tel: sessionStorage.getItem("tel"),
-    email: sessionStorage.getItem("email"),
-    check: sessionStorage.getItem("check"),
-  });
+
   const navigate = useNavigate();
+
+  const [state, setState] = useState({ usuario: [] });
+
+  //   const [formData, setFormData] = useState({
+  //     username: "",
+  //     password: "",
+  //     name: "",
+  //     lastName: "",
+  //     selectId: "",
+  //     document: "",
+  //     selectGender: "",
+  //     selectRol: "",
+  //     address: "",
+  //     tel: "",
+  //     email: "",
+  //     check: "",
+  //   });
+
+  useEffect(() => {
+    const url_extra = "http://localhost:8000/extra_info/" + id;
+    const config = {
+      Authorization: "Bearer " + sessionStorage.getItem("token"),
+    };
+    const update_estudiante = async () => {
+      try {
+        const response = await axios.post(url_extra);
+        setState(response.data.user_extra[0]);
+
+        // setFormData({
+        //   username: extra.data.user_extra[0].username,
+        //   password: extra.data.user_extra[0].password,
+        //   name: extra.data.user_extra[0].first_name,
+        //   lastName: extra.data.user_extra[0].last_name,
+        //   selectId: extra.data.user_extra[0].selectId,
+        //   document: extra.data.user_extra[0].document,
+        //   selectGender: extra.data.user_extra[0].gender,
+        //   selectRol: extra.data.user_extra[0].rol,
+        //   address: extra.data.user_extra[0].address,
+        //   tel: extra.data.user_extra[0].tel,
+        //   email: extra.data.user_extra[0].email,
+        //   check: extra.data.user_extra[0].check,
+        // });
+      } catch (error) {}
+    };
+    update_estudiante();
+  }, []);
+  console.log(state);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    name: "",
+    lastName: "",
+    selectId: "",
+    document: "",
+    selectGender: "",
+    selectRol: "",
+    address: "",
+    tel: "",
+    email: "",
+    check: "",
+  });
+  console.log(formData);
+
+  //   console.log(extra.data.user_extra[0].username);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
+    setState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -66,24 +120,23 @@ function Formulario() {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    const url = "http://localhost:8000/actualizar_usuario";
-    // const url_persoa = "http://localhost:8000/actualizar_persona/";
-    const data = formData;
+    const url = "http://localhost:8000/actualizar_usuario_especifico/" + id;
+    const data = state;
     console.log("Datos a enviar:", data);
 
     if (
-      formData.address === "" ||
-      formData.name === "" ||
-      formData.lastName === "" ||
-      formData.document === "" ||
-      formData.password === "" ||
-      formData.tel === "" ||
-      formData.username === "" ||
-      formData.selectGender === "Seleccione un Género" ||
-      formData.selectId == "Tipo de documento" ||
-      formData.selectRol === "Seleccione un rol" ||
-      formData.email === "" ||
-      formData.check === false
+      state.direccion === "" ||
+      state.first_name === "" ||
+      state.last_name === "" ||
+      state.identificacion === "" ||
+      state.password === "" ||
+      state.telefono === "" ||
+      state.username === "" ||
+      state.genero === "Seleccione un Género" ||
+      state.tipo_identificacion == "Tipo de documento" ||
+      state.cargo === "Seleccione un rol" ||
+      state.email === "" ||
+      state.check === false
     ) {
       setError("Por favor, rellena todos los campos");
       return;
@@ -129,8 +182,9 @@ function Formulario() {
                 name="username"
                 placeholder="Usuario"
                 type="text"
-                value={formData.username}
+                value={state.username}
                 onChange={handleChange}
+                disabled
               />
             </FormGroup>
           </Col>
@@ -142,7 +196,7 @@ function Formulario() {
                 name="password"
                 placeholder="Contraseña"
                 type="password"
-                value={formData.password}
+                value={state.password}
                 onChange={handleChange}
               />
             </FormGroup>
@@ -154,10 +208,10 @@ function Formulario() {
               <Label for="name">Nombres</Label>
               <Input
                 id="ejemploNombre"
-                name="name"
+                name="first_name"
                 placeholder="Nombres"
                 type="text"
-                value={formData.name}
+                value={state.first_name}
                 onChange={handleChange}
               />
             </FormGroup>
@@ -167,10 +221,10 @@ function Formulario() {
               <Label for="lastName">Apellidos</Label>
               <Input
                 id="ejemploApellidos"
-                name="lastName"
+                name="last_name"
                 placeholder="Apellidos"
                 type="text"
-                value={formData.lastName}
+                value={state.last_name}
                 onChange={handleChange}
               />
             </FormGroup>
@@ -184,10 +238,10 @@ function Formulario() {
               </Label>
               <Input
                 id="ejemploSelectId"
-                name="selectId"
+                name="tipo_identificacion"
                 type="select"
                 style={{ width: "40%", display: "inline" }}
-                value={formData.selectId}
+                value={state.tipo_identificacion}
                 onChange={handleChange}
               >
                 <option>Tipo de documento</option>
@@ -199,12 +253,13 @@ function Formulario() {
               </Input>
               <Input
                 id="ejemploId"
-                name="document"
+                name="identificacion"
                 placeholder="Numero de Identificación"
                 type="number"
                 style={{ width: "60%", display: "inline" }}
-                value={formData.document}
+                value={state.identificacion}
                 onChange={handleChange}
+                min={0}
               />
             </FormGroup>
           </Col>
@@ -213,12 +268,12 @@ function Formulario() {
               <Label for="gener">Genero</Label>
               <Input
                 id="ejemploSelectGener"
-                name="selectGender"
+                name="genero"
                 type="select"
                 value={
-                  formData.selectGender == "Masculino"
+                  state.genero == "Masculino" || state.genero == "M"
                     ? "M"
-                    : formData == "Femenino"
+                    : state.genero == "Femenino" || state.genero == "F"
                     ? "F"
                     : "Otro"
                 }
@@ -236,9 +291,9 @@ function Formulario() {
               <Label for="rol">Cargo</Label>
               <Input
                 id="ejemploSelectRol"
-                name="selectRol"
+                name="cargo"
                 type="select"
-                value={formData.selectRol}
+                value={state.cargo}
                 onChange={handleChange}
               >
                 <option>Seleccione un rol</option>
@@ -258,9 +313,9 @@ function Formulario() {
               <Label for="exampleAddress">Dirección</Label>
               <Input
                 id="exampleAddress"
-                name="address"
+                name="direccion"
                 placeholder="Cr 30 20-54"
-                value={formData.address}
+                value={state.direccion}
                 onChange={handleChange}
               />
             </FormGroup>
@@ -270,11 +325,12 @@ function Formulario() {
               <Label for="exampleTel">Telefono</Label>
               <Input
                 id="ejemploTelefono"
-                name="tel"
+                name="telefono"
                 placeholder="Numero Telefonico"
                 type="number"
-                value={formData.tel}
+                value={state.telefono}
                 onChange={handleChange}
+                min={0}
               />
             </FormGroup>
           </Col>
@@ -288,7 +344,7 @@ function Formulario() {
                 name="email"
                 placeholder="Correo"
                 type="email"
-                value={formData.email}
+                value={state.email}
                 onChange={handleChange}
               />
             </FormGroup>
@@ -301,14 +357,26 @@ function Formulario() {
             name="check"
             type="checkbox"
             style={{ display: "", margin: "2px", float: "none", width: "30px" }}
-            value={formData.check===true?true:false}
+            value={
+              state.check === false ||
+              state.check === undefined ||
+              state.check === null
+                ? true
+                : true
+            }
             onChange={() =>
               setFormData((prevState) => ({
                 ...prevState,
                 check: !prevState.check,
               }))
             }
-            checked={formData.check}
+            checked={
+              state.check === false ||
+              state.check === undefined ||
+              state.check === null
+                ? true
+                : true
+            }
             //   onChange={handleChange}
           />
           <Label check for="exampleCheck">
