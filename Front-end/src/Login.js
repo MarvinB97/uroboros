@@ -143,6 +143,8 @@ const Form = () => {
             sessionStorage.setItem("first_name", response.data.user.first_name);
             sessionStorage.setItem("last_name", response.data.user.last_name);
             sessionStorage.setItem("email", response.data.user.email);
+            document.cookie = `token=${response.data.token}; path=/;`;
+            sessionStorage.setItem("token", response.data.token);
 
             navigate("/profile");
           }
