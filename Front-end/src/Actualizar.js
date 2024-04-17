@@ -69,7 +69,7 @@ function Formulario() {
     const url = "http://localhost:8000/actualizar_usuario";
     // const url_persoa = "http://localhost:8000/actualizar_persona/";
     const data = formData;
-    console.log("Datos a enviar:", data);
+    // console.log("Datos a enviar:", data);
 
     if (
       formData.address === "" ||
@@ -92,14 +92,14 @@ function Formulario() {
       axios
         .post(url, data)
         .then((response) => {
-          console.log("Respuesta del servidor:", response);
+          // console.log("Respuesta del servidor:", response);
           // setWebResponse(response);
           if (
             response.request.status === 201 &&
             response.request.statusText === "Created"
           ) {
             // Usuario autenticado, puedes redirigirlo a otra página o mostrar un mensaje de éxito
-            // // console.log("Usuario autenticado:", response.data.user.username);
+            // // // console.log("Usuario autenticado:", response.data.user.username);
 
             // Redirige a la pantalla de bienvenida después del inicio de sesión
             setError(response.data.message);
@@ -107,14 +107,14 @@ function Formulario() {
           }
         })
         .catch((error) => {
-          console.log("Error al iniciar sesión:", error);
+          // console.log("Error al iniciar sesión:", error);
           // setWebError(error);
           setError(error.response.data.message);
         });
     }
 
     // Aquí puedes enviar los datos del formulario a tu servidor
-    console.log(formData);
+    // console.log(formData);
   };
 
   return (

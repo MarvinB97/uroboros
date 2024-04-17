@@ -35,7 +35,7 @@ export default function Actualizar() {
 
 function Formulario() {
   const { id } = useParams();
-  //   console.log("ID de usuario:", id);
+  //   // console.log("ID de usuario:", id);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -85,7 +85,7 @@ function Formulario() {
     };
     update_estudiante();
   }, []);
-  console.log(state);
+  // console.log(state);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -100,9 +100,9 @@ function Formulario() {
     email: "",
     check: "",
   });
-  console.log(formData);
+  // console.log(formData);
 
-  //   console.log(extra.data.user_extra[0].username);
+  //   // console.log(extra.data.user_extra[0].username);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -122,7 +122,7 @@ function Formulario() {
     e.preventDefault();
     const url = "http://localhost:8000/actualizar_usuario_especifico/" + id;
     const data = state;
-    console.log("Datos a enviar:", data);
+    // console.log("Datos a enviar:", data);
 
     if (
       state.direccion === "" ||
@@ -145,14 +145,14 @@ function Formulario() {
       axios
         .post(url, data)
         .then((response) => {
-          console.log("Respuesta del servidor:", response);
+          // console.log("Respuesta del servidor:", response);
           // setWebResponse(response);
           if (
             response.request.status === 201 &&
             response.request.statusText === "Created"
           ) {
             // Usuario autenticado, puedes redirigirlo a otra página o mostrar un mensaje de éxito
-            // // console.log("Usuario autenticado:", response.data.user.username);
+            // // // console.log("Usuario autenticado:", response.data.user.username);
 
             // Redirige a la pantalla de bienvenida después del inicio de sesión
             setError(response.data.message);
@@ -160,14 +160,14 @@ function Formulario() {
           }
         })
         .catch((error) => {
-          console.log("Error al iniciar sesión:", error);
+          // console.log("Error al iniciar sesión:", error);
           // setWebError(error);
           setError(error.response.data.message);
         });
     }
 
     // Aquí puedes enviar los datos del formulario a tu servidor
-    console.log(formData);
+    // console.log(formData);
   };
 
   return (

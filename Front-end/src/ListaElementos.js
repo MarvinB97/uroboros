@@ -61,7 +61,7 @@ class ListaElementos extends Component {
       this.setState({
         data: response.data,
       });
-      // console.log(response.data);
+      // // console.log(response.data);
     } catch (error) {}
   };
 
@@ -73,7 +73,7 @@ class ListaElementos extends Component {
   // Maneja la adición de un nuevo elemento
   addItem = () => {
     const { navigate } = this.props;
-    console.log(this.props);
+    // console.log(this.props);
     if (this.props.navigate.origin === "obras") {
       // navigate.navigate("");
     } else if (this.props.navigate.origin === "crear_usuarios") {

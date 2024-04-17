@@ -67,7 +67,7 @@ const Form = () => {
 
     const url = "http://localhost:8000/login";
     const data = { username, password };
-    // console.log("Datos a enviar:", data);
+    // // console.log("Datos a enviar:", data);
 
     if (username === "" || password === "") {
       setError("Por favor, rellena todos los campos");
@@ -76,20 +76,20 @@ const Form = () => {
       axios
         .post(url, data)
         .then((response) => {
-          console.log("Respuesta del servidor:", response);
+          // console.log("Respuesta del servidor:", response);
           // setWebResponse(response);
           if (
             response.request.status === 200 &&
             response.request.statusText === "OK"
           ) {
             // Usuario autenticado, puedes redirigirlo a otra página o mostrar un mensaje de éxito
-            // // console.log("Usuario autenticado:", response.data.user.username);
+            // // // console.log("Usuario autenticado:", response.data.user.username);
             let id = response.data.user.id;
             const url_extra = "http://localhost:8000/extra_info/" + id;
             axios
               .post(url_extra, response.data.user)
               .then((extra_response) => {
-                console.log("Respuesta del servidor:", extra_response);
+                // console.log("Respuesta del servidor:", extra_response);
 
                 sessionStorage.setItem(
                   "selectGender",
@@ -128,10 +128,10 @@ const Form = () => {
                   extra_response.data.user_extra[0].identificacion
                 );
                 // sessionStorage.setItem("foto", response.data.user.foto);
-                // console.log("Usuario autenticado:", response.data.user.username);
+                // // console.log("Usuario autenticado:", response.data.user.username);
               })
               .catch((error) => {
-                console.log("Error al iniciar sesión:", error);
+                // console.log("Error al iniciar sesión:", error);
                 // setWebError(error);
                 setError("Datos de Persona Extra no cargados");
               });
@@ -150,7 +150,7 @@ const Form = () => {
           }
         })
         .catch((error) => {
-          console.log("Error al iniciar sesión:", error);
+          // console.log("Error al iniciar sesión:", error);
           // setWebError(error);
           setError("Nombre de usuario o contraseña incorrectos");
         });
