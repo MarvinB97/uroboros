@@ -37,7 +37,7 @@ export default function Profile() {
     //       });
     //     })
     //     .catch((error) => {
-    //       console.log(error);
+    //       // console.log(error);
     //     });
     // }, []);
 
@@ -49,12 +49,12 @@ export default function Profile() {
           ...state,
           usuario: response.data,
         });
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {}
     };
     fetchData();
   }, []);
-  console.log(state.usuario);
+  // console.log(state.usuario);
   let estilo_li = { width: "100%" };
   let estilo_button_Eliminar = {
     display: "inline",
@@ -80,30 +80,30 @@ export default function Profile() {
   const rol = sessionStorage.getItem("rol");
 
   const handleUpdateData = (e, item) => {
-    console.log(item);
+    // console.log(item);
     navigate("/actualizar_usuario_especifico/" + item.id);
   };
 
   const handleDeactivation = (e, item) => {
-    console.log("Eliminando...");
-    console.log(item);
+    // console.log("Eliminando...");
+    // console.log(item);
     const url = "http://localhost:8000/eliminar_usuario/" + item.id;
     axios
       .post(url, item)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         const fetchData = async () => {
           try {
             const response = await axios.post(url);
 
-            console.log(response.message);
+            // console.log(response.message);
             window.location.reload();
           } catch (error) {}
         };
         fetchData();
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
 
@@ -206,7 +206,7 @@ function ProfileColumnOne({ info }) {
     adress: sessionStorage.getItem("address"),
     foto: sessionStorage.getItem("foto"),
   };
-  console.log(sessionStorage.foto);
+  // console.log(user_info.foto);
 
   return (
     <>
@@ -214,18 +214,22 @@ function ProfileColumnOne({ info }) {
         <img
           className="photo-profile"
           src={
-            user_info.foto !== "" || user_info.foto === "undefined"
-              ? user_info.foto
-              : "https://img.freepik.com/free-photo/user-front-side-with-white-background_187299-40007.jpg?t=st=1713212440~exp=1713216040~hmac=5525e22d6ddebb8d14e7f939722504e547ebe43969dc0837d164ec7cfb48d989&w=740"
+            user_info.foto == "" || user_info.foto === null
+              ? "https://img.freepik.com/foto-gratis/hombre-feliz-pie-playa_107420-9868.jpg?1"
+              : user_info.foto
           }
-          style={{ width: "50%", height: "30%" }}
+          style={{ width: "80%", height: "100%" }}
           alt="usuario"
         />
-        {user_info.foto === "" || user_info.foto == "undefined" ? (
+        {user_info.foto === "" || user_info.foto === null ? (
           <div class="bottom-right" style={{ color: "black" }}>
             Dedigned by{" "}
             {
-              <a href="http://www.freepik.com/" style={{ color: "white" }}>
+              <a
+                href="http://www.freepik.com/"
+                target="_blank"
+                style={{ color: "white" }}
+              >
                 FreePik
               </a>
             }
