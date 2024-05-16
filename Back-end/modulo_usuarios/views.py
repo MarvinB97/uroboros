@@ -20,28 +20,28 @@ class Login(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
-        # # # print(request.data)
+        # # # # print(request.data)
 
         username = request.data.get('username', '')
         password = request.data.get('password', '')
-        # # # print(username)
-        # # # print(password)
+        # # # # print(username)
+        # # # # print(password)
         user = authenticate(
             username=username,
             password=password
         )
-        # # # print(user)
+        # # # # print(user)
         if user:
             login_serializer = self.serializer_class(data=request.data)
-            # print(login_serializer.is_valid())
+            # # print(login_serializer.is_valid())
             if user.is_active:
                 if login_serializer.is_valid():
-                    # # # print(login_serializer)
+                    # # # # print(login_serializer)
                     user_serializer = user_token(user)
-                    # # # print(user_serializer)
-                    # login(request, user)
-                    # # # print(login_serializer)
-                    # print(user_serializer)
+                    # # # # print(user_serializer)
+                    login(request, user)
+                    # # # # print(login_serializer)
+                    # # print(user_serializer)
                     return Response({
                         'token': login_serializer.validated_data.get('access'),
                         'refresh-token': login_serializer.validated_data.get('refresh'),
@@ -60,11 +60,11 @@ class Login(TokenObtainPairView):
 class crear_usuario(APIView):
 
     def post(self, request):
-        # # # print(request.data)
+        # # # # print(request.data)
         user_form = request.data
-        # # # print(user_form['password'])
+        # # # # print(user_form['password'])
         # user_serializer = UserSerializer(data=request.data)
-        # # # print(user_form.get('password'))
+        # # # # print(user_form.get('password'))
         lista_usuarios = []
         lista_persona = []
         lista_cargo = []
@@ -88,15 +88,15 @@ class crear_usuario(APIView):
                     return Response({"message": "Ocurrió un error con el usuario"}, status=status.HTTP_400_BAD_REQUEST)
                 User.objects.bulk_create(lista_usuarios)
 
-            # # # print(Usuario)
+            # # # # print(Usuario)
 
             try:
                 cargo_user = Cargo.objects.filter(
                     nombre=user_form['selectRol']).values()
                 user_persona = User.objects.get(
                     username=user_form['username'])
-                # # # print(user_persona)
-                # # # print(cargo_user)
+                # # # # print(user_persona)
+                # # # # print(cargo_user)
                 persona = Persona(
                     identificacion=user_form['document'],
                     direccion=user_form['address'],
@@ -115,7 +115,7 @@ class crear_usuario(APIView):
             try:
                 persona_user = Persona.objects.get(
                     id_usuario_id=user_persona.id)
-                # # # print(persona_user)
+                # # # # print(persona_user)
                 cargo = Usuario_cargos(
                     persona_id=persona_user.id,
                     cargo_id=cargo_user[0]['id']
@@ -134,13 +134,15 @@ class crear_usuario(APIView):
 class actualizar_usuario(APIView):
 
     def post(self, request):
-        # # print(request.data)
-        # # print(request.user)
+        # print(request.data)
+        # print(request.user)
         user_form = request.data
-        # # # print(user_form['password'])
+        # # # # print(user_form['password'])
         # user_serializer = UserSerializer(data=request.data)
-        # # # print(user_form.get('password'))
+        # # # # print(user_form.get('password'))
         lista_usuarios = []
+        lista_persona = []
+        lista_cargo = []
         if user_form:
             try:
                 User.objects.filter(username=user_form['username']).exists()
@@ -156,33 +158,138 @@ class actualizar_usuario(APIView):
                 return Response({'message': 'Usuario inexistente'}, status=status.HTTP_400_BAD_REQUEST)
 
             try:
+                Persona.objects.filter(
+                    id_usuario_id=user.id).exists()
+                
                 persona = Persona.objects.filter(
                     id_usuario_id=user.id).values()
-                persona.update(
-                    identificacion=user_form['document'],
-                    tipo_identificacion=user_form['selectId'],
-                    genero=user_form['selectGender'],
-                    telefono=user_form['tel'],
-                    direccion=user_form['address']
-                )
+                
+                if not persona:
+                    try:
+                        cargo_user = Cargo.objects.filter(
+                            nombre=user_form['selectRol']).values()
+                        user_persona = User.objects.get(
+                            username=user_form['username'])
+                        # # # # print(user_persona)
+                        # # # # print(cargo_user)
+                        persona = Persona(
+                            identificacion=user_form['document'],
+                            direccion=user_form['address'],
+                            genero=user_form['selectGender'],
+                            id_cargo_id=cargo_user[0]['id'],
+                            id_usuario=user_persona,
+                            telefono=user_form['tel'],
+                            tipo_identificacion=user_form['selectId'],
+                        )
+                        lista_persona.append(persona)
+                    except:
+                        return Response({"message": "Ocurrió un error con la persona"}, status=status.HTTP_400_BAD_REQUEST)
+                    # print("creó la persona")
+                    Persona.objects.bulk_create(lista_persona)
+                else:
+                    persona.update(
+                        identificacion=user_form['document'],
+                        tipo_identificacion=user_form['selectId'],
+                        genero=user_form['selectGender'],
+                        telefono=user_form['tel'],
+                        direccion=user_form['address']
+                    )
+                    # print("Encontró Persona ")
             except Persona.DoesNotExist:
-                return Response({'message': 'No se encontró la persona'}, status=status.HTTP_400_BAD_REQUEST)
-
+                try:
+                    cargo_user = Cargo.objects.filter(
+                        nombre=user_form['selectRol']).values()
+                    user_persona = User.objects.get(
+                        username=user_form['username'])
+                    # # # # print(user_persona)
+                    # # # # print(cargo_user)
+                    persona = Persona(
+                        identificacion=user_form['document'],
+                        direccion=user_form['address'],
+                        genero=user_form['selectGender'],
+                        id_cargo_id=cargo_user[0]['id'],
+                        id_usuario=user_persona,
+                        telefono=user_form['tel'],
+                        tipo_identificacion=user_form['selectId'],
+                    )
+                    lista_persona.append(persona)
+                except:
+                    return Response({"message": "Ocurrió un error con la persona"}, status=status.HTTP_400_BAD_REQUEST)
+                # print("creó la persona")
+                Persona.objects.bulk_create(lista_persona)
+                
             try:
+                persona = Persona.objects.filter(
+                    id_usuario_id=user.id).values()
+                Usuario_cargos.objects.filter(
+                    persona_id=persona[0]['id']).exists()
+                
                 cargo = Usuario_cargos.objects.filter(
                     persona_id=persona[0]['id']).values()
-                # # print(cargo)
-                cargo_user = Cargo.objects.filter(
-                    nombre=user_form['selectRol']).values()
-                # # print(cargo_user)
-                cargo.update(
-                    cargo_id=cargo_user[0]['id']
-                )
-                persona.update(
-                    id_cargo_id=cargo_user[0]['id']
-                )
+                # print(cargo)
+                
+                if not cargo:
+                    try:
+                        user_persona = User.objects.get(
+                            username=user_form['username'])
+                        persona_user = Persona.objects.get(
+                            id_usuario_id=user_persona.id)
+                        cargo_user = Cargo.objects.filter(
+                        nombre=user_form['selectRol']).values()
+                        # print(user_persona)
+                        # print("Persona")
+                        # print(persona_user.id)
+                        # print(cargo_user)
+                        cargo = Usuario_cargos(
+                            persona_id=persona_user.id,
+                            cargo_id=cargo_user[0]['id']
+                        )
+                        # print(cargo)
+                        lista_cargo.append(cargo)
+                        # print(lista_cargo)
+                    except:
+                        # print(user_persona)
+                        # print("No Entra primer")
+                        return Response({"message": "Ocurrió un error con el cargo"}, status=status.HTTP_400_BAD_REQUEST)
+
+                    Usuario_cargos.objects.bulk_create(lista_cargo)
+                else:
+                    # print("Encontró Cargo")
+                    try:
+                        cargo = Usuario_cargos.objects.filter(
+                            persona_id=persona[0]['id']).values()
+                        # # # print(cargo)
+                        # print(user_form)
+                        cargo_user = Cargo.objects.filter(
+                            nombre=user_form['selectRol']).values()
+                        # # # print(cargo_user)
+                        cargo.update(
+                            cargo_id=cargo_user[0]['id']
+                        )
+                        persona.update(
+                            id_cargo_id=cargo_user[0]['id']
+                        )
+                    except Usuario_cargos.DoesNotExist:
+                        return Response({'message': 'No se encontró el cargo'}, status=status.HTTP_400_BAD_REQUEST)
+
             except Usuario_cargos.DoesNotExist:
-                return Response({'message': 'No se encontró el cargo'}, status=status.HTTP_400_BAD_REQUEST)
+                # print("WTF")
+                try:
+                    persona_user = Persona.objects.get(
+                        id_usuario_id=user_persona.id)
+                    # # # # print(persona_user)
+                    cargo = Usuario_cargos(
+                        persona_id=persona_user.id,
+                        cargo_id=cargo_user[0]['id']
+                    )
+                    lista_cargo.append(cargo)
+                except:
+                    return Response({"message": "Ocurrió un error con el cargo"}, status=status.HTTP_400_BAD_REQUEST)
+
+                Usuario_cargos.objects.bulk_create(lista_cargo)
+
+            #     return Response({"message": "Se creó el usuario Satisfactoriamente"}, status=status.HTTP_201_CREATED)
+            # return Response({'message': 'No se encontró el cargo'}, status=status.HTTP_400_BAD_REQUEST)
 
             # updated_user = authenticate(
             #     username=user.username,
@@ -198,13 +305,13 @@ class actualizar_usuario(APIView):
 class actualizar_usuario_especifico(APIView):
 
     def post(self, request, pk):
-        # # print(request.data)
-        # # print(request.user)
-        # print(pk)
+        # # # print(request.data)
+        # # # print(request.user)
+        # # print(pk)
         user_form = request.data
-        # # # print(user_form['password'])
+        # # # # print(user_form['password'])
         # user_serializer = UserSerializer(data=request.data)
-        # # # print(user_form.get('password'))
+        # # # # print(user_form.get('password'))
         lista_usuarios = []
         if user_form:
             try:
@@ -236,10 +343,10 @@ class actualizar_usuario_especifico(APIView):
             try:
                 cargo = Usuario_cargos.objects.filter(
                     persona_id=persona[0]['id']).values()
-                # # print(cargo)
+                # # # print(cargo)
                 cargo_user = Cargo.objects.filter(
                     nombre=user_form['cargo']).values()
-                # # print(cargo_user)
+                # # # print(cargo_user)
                 cargo.update(
                     cargo_id=cargo_user[0]['id']
                 )
@@ -264,7 +371,7 @@ class desactivar_usuario(APIView):
 
     def post(self, request, pk):
         user = User.objects.filter(id=pk).values()
-        # # print(user)
+        # # # print(user)
         try:
             user = User.objects.get(id=pk)
             user.is_active = False
@@ -276,20 +383,20 @@ class desactivar_usuario(APIView):
 
 class extra_info(APIView):
     def post(self, request, pk):
-        # # # print("Data:")
-        # # # print(request.data)
-        # # # print(pk)
+        # # # # print("Data:")
+        # # # # print(request.data)
+        # # # # print(pk)
         user = User.objects.filter(id=pk).values()
-        # # # print("usuario:")
-        # # # print(user)
+        # # # # print("usuario:")
+        # # # # print(user)
         # serialized_user = UserSerializer(user, many=True)
-        # # # print("serialized:")
-        # # # print(serialized_user.data)
+        # # # # print("serialized:")
+        # # # # print(serialized_user.data)
         final_user_data = []
         try:
             persona = Persona.objects.filter(
                 id_usuario_id=user[0]['id']).values()
-            # # # print(persona)
+            # # # # print(persona)
         except Persona.DoesNotExist:
 
             return Response({'message': 'No se encontró la persona'}, status=status.HTTP_400_BAD_REQUEST)
@@ -309,7 +416,7 @@ class extra_info(APIView):
         data.update({'cargo': cargo_user})
         final_user_data.append(data)
 
-        # # print(final_user_data)
+        # # # print(final_user_data)
         return Response({'user_extra': final_user_data}, status=status.HTTP_200_OK)
 
 
@@ -317,7 +424,7 @@ class listar_usuarios(APIView):
 
     def post(self, request):
         users = User.objects.all().values()
-        # # print(users)
+        # # # print(users)
         lista_usuarios = []
         for user in users:
             try:
@@ -330,7 +437,7 @@ class listar_usuarios(APIView):
                     "status": user['is_active']
                 }]
             except:
-                # # print("WTF")
+                # # # print("WTF")
                 dicc_user = [{
                     "id": None,
                     "username": None,
@@ -347,7 +454,7 @@ class listar_usuarios(APIView):
                     "tipo_identificacion": persona[0]['tipo_identificacion'],
                     "direccion": persona[0]['direccion'],
                 }]
-                # # print(dicc_persona)
+                # # # print(dicc_persona)
             except Persona.DoesNotExist:
                 dicc_persona = [{
                     "identificacion": None,
@@ -363,7 +470,7 @@ class listar_usuarios(APIView):
                 dicc_cargo = [{
                     "cargo": cargo_user
                 }]
-                # # print(cargo_user)
+                # # # print(cargo_user)
             except Cargo.DoesNotExist:
                 return Response({'message': 'No se encontró el cargo'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -371,5 +478,5 @@ class listar_usuarios(APIView):
             # data.update({'cargo': cargo_user})
             lista_usuarios.append(data)
 
-        # # print(lista_usuarios)
+        # # # print(lista_usuarios)
         return Response(lista_usuarios, status=status.HTTP_200_OK)
