@@ -10,6 +10,9 @@ import ActualizarUsuarioEspecifico from "./ActualizarUsuarioEspecifico.js";
 import AcercaDeNosotros from "./AcercaDeNosotros.js";
 import Signin from "./Signin.js";
 
+import ActualizarObras from './ActualizarObras.js';
+import Gerente from './Gerente.js';
+
 const App = () => {
   const token = sessionStorage.getItem("token");
   const autenticado = !!token;
@@ -22,6 +25,8 @@ const App = () => {
             <Route path="/profile" element={<ProteccionDeRuta><Profile /></ProteccionDeRuta>} />
             <Route path="/signin" element={<ProteccionDeRuta><Signin /></ProteccionDeRuta>} />
             <Route path="/actualizar" element={<ProteccionDeRuta><Actualizar /></ProteccionDeRuta>} />
+            <Route path="/actualizar-obras" element={<ProteccionDeRuta><ActualizarObras/></ProteccionDeRuta>}/>
+            <Route path="/gerente" element={<ProteccionDeRuta><Gerente/></ProteccionDeRuta>}/>
             <Route path="/actualizar_usuario_especifico/:id" element={<ProteccionDeRuta><ActualizarUsuarioEspecifico /></ProteccionDeRuta>} />
             <Route path="/acerca-de-nosotros" element={<ProteccionDeRuta><AcercaDeNosotros /></ProteccionDeRuta>} />
           </Routes>
