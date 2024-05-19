@@ -8,7 +8,7 @@ import { Button } from 'reactstrap';
 
 export default function RetrievePassword(){
     const navigate = useNavigate();
-    const volver = ()=>{navigate('/profile')};
+    const volver = ()=>{navigate('/')};
 
     return (
         <>
