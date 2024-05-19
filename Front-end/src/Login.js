@@ -178,7 +178,7 @@ const Form = () => {
         <button type="submit">Iniciar sesión</button>
       </form>
       <p>
-        <a href="...">¿Has olvidado tu contraseña?</a>
+        <a href='./recuperar-contrasena'>¿Has olvidado tu contraseña?</a>
       </p>
       {/* <button onClick={crearCuenta}>Crear Cuenta</button> */}
       {error && <p>{error}</p>}

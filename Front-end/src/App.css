@@ -45,6 +45,82 @@
 }
 
 
+/*----RESPONSIVE FLEXBOX-CONTAINER--------*/
+
+/*------MOBILE------*/
+@media(max-width: 600px){
+  .flexbox-container, .flexbox-container-profile {
+    height: 80vh;
+    margin-top: 5vh;
+    display: block;
+  }
+
+  .flexbox-container > div {
+    width: 90vw;
+    padding: 10px;
+    background: #fff;
+  }
+  
+  .flexbox-container-profile div:first-child{
+    width: 90vw;
+    margin: auto;
+    padding: 0%;
+    background: #1653fc;
+    color: #ffffff;
+  }
+  
+  .flexbox-container-profile > div{
+    width: 90vw;
+    margin: auto;
+    padding: 10px;
+    background: #ffffff;
+  }
+  
+  
+  .flexbox-container > div {
+    margin: auto;
+  }
+}
+
+/*------TABLETS--------*/
+@media(min-width: 600px) and (max-width: 1200px){
+  .flexbox-container, .flexbox-container-profile {
+    height: 45vh;
+    margin-top: 5vh;
+    display: block;
+  }
+
+  .flexbox-container > div {
+    width: 50vw;
+    padding: 10px;
+    background: #fff;
+  }
+  
+  .flexbox-container-profile div:first-child{
+    width: 50vw;
+    margin: auto;
+    padding: 0%;
+    background: #1653fc;
+    color: #ffffff;
+  }
+  
+  .flexbox-container-profile > div{
+    width: 50vw;
+    margin: auto;
+    padding: 10px;
+    background: #ffffff;
+  }
+  
+  
+  .flexbox-container > div {
+    margin: auto;
+  }
+}
+
+
+
+
+
 /*
 ------------HEADER--------------
 */
@@ -110,6 +186,28 @@
 
 
 
+/*----RESPONSIVE HEADER--------*/
+/*------MOBILE------*/
+@media(max-width: 600px){
+  .App-header, .Encabezado{
+    font-size: 2vh;
+  }
+}
+
+/*------TABLETS--------*/
+@media(min-width: 600px) and (max-width: 1200px){
+  .App-header, .Encabezado{
+    font-size: 4vh;
+  }
+}
+
+
+
+
+
+
+
+/*-------------------LOGIN----------------------*/
 
 /*
 ------------COLUMN-ONE--------------
@@ -123,8 +221,6 @@
 }
 
 
-
-
 /*
 ------------COLUMN-TWO--------------
 */
@@ -132,13 +228,6 @@
   text-align: center;
   margin: 20%;
 }
-
-
-
-
-
-
-
 
 
 /*
@@ -149,9 +238,9 @@
   text-align: center;
   margin: auto;
   height: 60vh;
-  width: 60vh;
+  width: 30vw;
   margin-top: 10vh;
-  padding: 50px 0px 50px 0px;
+  padding: 5vh 0vw 50vh 0vw;
   border-radius: 30px;
   background: linear-gradient(to bottom right, rgb(221, 221, 221), white);
   box-shadow: 10px 5px 5px rgb(167, 167, 167);
@@ -165,7 +254,7 @@
 
 
 .login input {
-  padding: 10px 40px;
+  padding: 2vh 4vw;
   border-radius: 15px;
   border: 0.1px solid rgb(100, 100, 100);
 }
@@ -173,18 +262,13 @@
 .login button {
   margin-top: 2%;
   font-size: 20px;
-  padding: 10px 50px;
+  padding: 2vh 5vw;
   background: rgb(22, 118, 253);
   color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
 }
-
-
-
-
-
 
 .footpage {
   text-align: center;
@@ -194,17 +278,39 @@
 }
 
 
+/*----RESPONSIVE LOGIN--------*/
+
+/*------MOBILE------*/
+@media(max-width: 600px){
+  .login {
+    width: 80vw;
+  }
+  
+}
+
+/*------TABLETS--------*/
+@media(min-width: 600px) and (max-width: 1200px){
+  .login {
+    width: 50vw;
+  }
+}
+
+
+
+
+
+
 
 /*-------------------PROFILE----------------------*/
 
 .column-one-profile, .column-two-profile{
   border-radius: 2%;
-  width: 100%;
+  width: 100vw;
 }
 
 .column-three-profile{
   border-radius: 2%;
-  width: 80%;
+  width: 80vw;
 
 }
 
@@ -224,4 +330,12 @@ div.card-profile{
 div.card{
   width: 100%;
 }
-/* card-profile collapse show */
+
+
+
+
+/*----RESPONSIVE PROFILE--------*/
+/*------MOBILE------*/
+@media(max-width: 600px){
+
+}
