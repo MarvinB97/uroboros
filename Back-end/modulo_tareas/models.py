@@ -14,6 +14,7 @@ class Avance(models.Model):
     observaciones = models.TextField()
     # notas_voz = models.FileField(upload_to='notas_voz/', null=True, blank=True)
     notas_voz = models.CharField(max_length=50,default=None)
+    is_active = models.BooleanField(default=True)
     
     class Meta:
         db_table = 'avance'
@@ -26,6 +27,7 @@ class Obra (models.Model):
     estado = models.CharField(max_length=50)
     usuarios_asignados = models.CharField(max_length=50)
     id_usuario_capataz = models.ForeignKey(Persona, on_delete=models.CASCADE, default=None)
+    is_active = models.BooleanField(default=True)
 
 class Tarea (models.Model):
     # nombre = models.CharField(max_length=50)
@@ -36,6 +38,7 @@ class Tarea (models.Model):
     id_usuario_capataz = models.ForeignKey(Persona, on_delete=models.CASCADE, default=None)
     id_obra = models.ForeignKey(Obra, on_delete=models.CASCADE, default=None)
     id_avance = models.ForeignKey(Avance, on_delete=models.CASCADE, default=None)
+    is_active = models.BooleanField(default=True)
     
     class Meta:
         db_table = 'tarea'
