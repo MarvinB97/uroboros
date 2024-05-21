@@ -9,6 +9,13 @@ import Actualizar from "./Actualizar.js";
 import ActualizarUsuarioEspecifico from "./ActualizarUsuarioEspecifico.js";
 import AcercaDeNosotros from "./AcercaDeNosotros.js";
 import Signin from "./Signin.js";
+import CrearTareas from './CrearTareas.js';
+
+import CrearObra from './CrearObra.js';
+import ActualizarObras from './ActualizarObras.js';
+import Gerente from './Gerente.js';
+import RetrievePassword from './RetrievePassword.js'
+
 
 const App = () => {
   const token = sessionStorage.getItem("token");
@@ -21,7 +28,12 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<ProteccionDeRuta><Profile /></ProteccionDeRuta>} />
             <Route path="/signin" element={<ProteccionDeRuta><Signin /></ProteccionDeRuta>} />
+            <Route path="/recuperar-contrasena" element={<ProteccionDeRuta><RetrievePassword/></ProteccionDeRuta>}/>
             <Route path="/actualizar" element={<ProteccionDeRuta><Actualizar /></ProteccionDeRuta>} />
+            <Route path="crear_obras" element={<ProteccionDeRuta><CrearObra/></ProteccionDeRuta>}/>
+            <Route path="/actualizar_obras/:id" element={<ProteccionDeRuta><ActualizarObras/></ProteccionDeRuta>}/>
+            <Route path='/crear_tareas' element={<ProteccionDeRuta><CrearTareas/></ProteccionDeRuta>}/>
+            <Route path="/gerente" element={<ProteccionDeRuta><Gerente/></ProteccionDeRuta>}/>
             <Route path="/actualizar_usuario_especifico/:id" element={<ProteccionDeRuta><ActualizarUsuarioEspecifico /></ProteccionDeRuta>} />
             <Route path="/acerca-de-nosotros" element={<ProteccionDeRuta><AcercaDeNosotros /></ProteccionDeRuta>} />
           </Routes>
