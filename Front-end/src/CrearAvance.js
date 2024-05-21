@@ -37,20 +37,9 @@ export default function CrearObra() {
 function Formulario() {
   const [formData, setFormData] = useState({
     descripcion: "",
-    estado: "",
-    usuarios_asignados: "",
-    id_usuario_capataz: "",
-    id_obra: "",
-    id_avance: "",
+    observaciones: "",
+    notas_voz: "",
     is_active: true,
-    id_db_capataz: "",
-    new_usuarios_asignados: "",
-    // nit: "",
-    // nit_number: "",
-    // mes_inicio: "",
-    // tipo_pago: "",
-    // direccion: "",
-    // telefono: "",
   });
 
   const [users, setUsers] = useState([]);
@@ -85,6 +74,7 @@ function Formulario() {
   useEffect(() => {
     const url = "http://localhost:8000/listar_avances";
     axios
+
       .post(url)
       .then((response) => {
         setAvances(response.data);
@@ -104,11 +94,9 @@ function Formulario() {
         selected_obra = element;
       }
     }
-    // console.log(selected_obra);
     setFormData({
       ...formData,
       id_usuario_capataz: selected_obra.id_usuario_capataz,
-
       //   usuarios_asignados: selected_obra.usuarios_asignados,
     });
 
@@ -123,13 +111,30 @@ function Formulario() {
           setFormData({
             ...formData,
             id_db_capataz: response.data.id,
-            id_usuario_capataz: response.data.id,
             usuarios_asignados: selected_obra.usuarios_asignados,
-            id_obra: selected_obra.id,
           });
         });
     }
 
+    // obra.map((obra) => {
+    //   obra = e.target.value;
+    // });
+    // // console.log(selected_obra);
+    // const { name, value } = e.target;
+
+    // // // console.log(name, value);
+    // let usuario_asignado = "";
+    // for (let i = 0; i < users.length; i++) {
+    //   //   // // console.log(users[i].id);
+    //   if (users[i].id == value) {
+    //     // // // console.log(users[i].username);
+    //     usuario_asignado = users[i].username;
+    //   }
+    // }
+    // setFormData({
+    //   ...formData,
+    //   id_usuario_capataz: value,
+    // });
   }; // Aquí deberías actualizar el estado de tu formulario con el valor seleccionado
 
   const handleSelectUser = (e) => {
@@ -187,19 +192,14 @@ function Formulario() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const url = "http://localhost:8000/crear_avance";
     const data = formData;
-    const url = "http://localhost:8000/crear_tarea";
     // // // console.log("Datos a enviar:", data);
 
     if (
       data.descripcion === "" ||
-      data.id_usuario_capataz === "" ||
-      data.estado === "" ||
-      data.usuarios_asignados === "" ||
-      data.id_obra === "" ||
-      data.id_obra === "Seleccione una Obra" ||
-      data.id_avance === "" ||
-      data.id_avance === "Seleccione un Avance" ||
+      data.observaciones === "" ||
+      data.notas_voz === "" ||
       data.is_active === ""
     ) {
       setError("Por favor, rellena todos los campos");
@@ -220,7 +220,7 @@ function Formulario() {
             setError(response.data.message);
             // console.log(response.data.message);
             setTimeout(() => {
-              navigate("/profile");
+              navigate("/crear_tareas");
             }, 1000);
           }
         })
@@ -243,23 +243,15 @@ function Formulario() {
     <Form>
       <Row>
         <Col md={6}>
-          <Label for="descripcion">Descripción de la tarea</Label>
+          <Label for="descripcion">Descripción del avance</Label>
         </Col>
         <Col md={6}>
-          <Label for="usuario_capataz">Capataz</Label>
+          <Label for="usuario_capataz">Observaciones</Label>
         </Col>
       </Row>
       <Row>
         <Col md={6}>
           <FormGroup>
-            {/* <Input
-              id="descripcion"
-              name="descripcion"
-              placeholder="Descripcion"
-              type="textArea"
-              value={formData.descripcion}
-              onChange={handleChange}
-            /> */}
             <textarea
               id="descripcion"
               name="descripcion"
@@ -273,13 +265,13 @@ function Formulario() {
         </Col>
         <Col md={6}>
           <FormGroup>
-            <Input
+            {/* <Input
               id="usuario_capataz"
               name="usuario_capataz"
               type="select"
               style={{ width: "60%", display: "inline" }}
               value={formData.id_db_capataz}
-              // onChange={(e) => handleSelectUser(e)}
+              onChange={(e) => handleSelectUser(e)}
               disabled
             >
               <option>Seleccione un usuario</option>
@@ -288,102 +280,43 @@ function Formulario() {
                   {user.username}
                 </option>
               ))}
-            </Input>
-          </FormGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col md={6}>
-          <FormGroup>
-            <Label for="estado">Estado</Label>
-            <Input
-              id="estado"
-              name="estado"
-              placeholder="Estado de la Tarea"
-              type="text"
-              value={formData.estado}
+            </Input> */}
+            <textarea
+              id="observaciones"
+              name="observaciones"
+              placeholder="observaciones"
+              rows="4"
+              cols="40"
+              value={formData.observaciones}
               onChange={handleChange}
-            />
-          </FormGroup>
-        </Col>
-        <Col md={6}>
-          <FormGroup>
-            <Label for="Usuarios Asignados a la Tarea">
-              Usuarios asignados
-            </Label>
-            <Input
-              id="usuarios_asignados"
-              name="usuarios_asignados"
-              placeholder="Usuarios Asignados"
-              type="text"
-              value={formData.usuarios_asignados}
-              //   onChange={handleChange}
             />
           </FormGroup>
         </Col>
       </Row>
       <Row>
-        <Col md={6}>
-          <FormGroup>
-            <Label for="id" style={{ display: "block" }}>
-              Seleccione una obra
-            </Label>
-            <Input
-              id="id_obra"
-              name="id_obra"
-              type="select"
-              style={{ width: "60%", display: "inline" }}
-              //   value={formData.id_obra}
-              onChange={(e) => handleSelect(e)}
-            >
-              <option>Seleccione una Obra</option>
-              {obra.map((obra, index) => (
-                <option key={index} value={obra.id}>
-                  {obra.id} {obra.descripcion} {obra.id_usuario_capataz}{" "}
-                  {obra.is_active}
-                </option>
-              ))}
-            </Input>
-          </FormGroup>
+        <Col>
+          <Label for="notas_voz">Notas de voz para el avance</Label>
         </Col>
-        <Col md={6}>
-          <FormGroup>
-            <Label for="mes_inicio">Seleccione un avance</Label>
-            <Input
-              id="id_avance"
-              name="id_avance"
-              type="select"
-              value={formData.id_avance}
-              onChange={handleChange}
-            >
-              <option>Seleccione un Avance</option>
-              {Avances.map((avance, index) => (
-                <option key={index} value={avance.id}>
-                  {avance.id} {avance.descripcion} {avance.observaciones}{" "}
-                  {avance.is_active}
-                </option>
-              ))}
-            </Input>
-          </FormGroup>
-          <Button onClick={handleCrearAvance}>Crear Avance</Button>
-        </Col>
-        {/* <Col md={4}>
-          <FormGroup>
-            <Label for="tipo_pago">Tipo de pago</Label>
-            <Input
-              id="tipo_pago"
-              name="tipo_pago"
-              type="select"
-              value={formData.tipo_pago}
-              onChange={handleChange}
-            >
-              <option>Seleccione un tipo de pago</option>
-              <option>Credito</option>
-              <option>Contado</option>
-            </Input>
-          </FormGroup>
+        {/* <Col md={6}>
+          <Label for="Usuarios Asignados a la Tarea">Usuarios asignados</Label>
         </Col> */}
       </Row>
+      <Row>
+        <Col>
+          <FormGroup>
+            <textarea
+              id="notas_voz"
+              name="notas_voz"
+              placeholder="Notas de 'voz'"
+              rows="4"
+              cols="40"
+              value={formData.notas_voz}
+              onChange={handleChange}
+            />
+          </FormGroup>
+        </Col>
+      </Row>
+
       {/* <Row>
         <Col md={6}>
           <FormGroup>

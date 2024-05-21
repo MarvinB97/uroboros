@@ -48,8 +48,8 @@ class crear_obra(APIView):
             Obra.objects.bulk_create(lista_obra)
 
         try:
-            print("Persona: ")
-            print(persona)
+            # print("Persona: ")
+            # print(persona)
             persona_obra = Persona_obra(
                 id_persona=persona,
                 id_obra=new_obra,
@@ -77,7 +77,7 @@ class listar_obra_especifica(APIView):
 
     def post(self, request, pk, *args, **kwargs):
         data = request.data
-        print(pk)
+        # print(pk)
         # id_obra = data.get('id')
         if not pk:
             return Response({'status': 'Debe ingresar un id'}, status=status.HTTP_400_BAD_REQUEST)
@@ -89,16 +89,18 @@ class listar_usuario_persona_obra(APIView):
 
     def post(self, request, pk, *args, **kwargs):
         data = request.data
+        # # print(data)
+        # print(pk)
         # id_obra = data.get('id')
         if not pk:
             return Response({'status': 'Debe ingresar un id'}, status=status.HTTP_400_BAD_REQUEST)
         persona = Persona.objects.filter(id=pk).values()
-        # print("AAAAAAAAHHHH")
-        # print(persona[0]["id_usuario_id"])
+        # # print("AAAAAAAAHHHH")
+        # # print(persona[0]["id_usuario_id"])
         usuario = User.objects.filter(id=persona[0]["id_usuario_id"])
         user_serialized = UserSerializer(usuario[0]).data
-        # print("Usuario:")
-        # print(user_serialized)
+        # # print("Usuario:")
+        # # print(user_serialized)
         list_user = []
         data = {
             "id": user_serialized["id"],
@@ -112,17 +114,17 @@ class editar_obra(APIView):
 
     def post(self, request, pk, *args, **kwargs):
         data = request.data
-        print(pk)
-        print(data.get('id_usuario_capataz'))
+        # print(pk)
+        # print(data.get('id_usuario_capataz'))
 
-        # print(id_obra)
+        # # print(id_obra)
         if not pk:
             return Response({'message': 'Debe ingresar un id'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             try:
                 obra = Obra.objects.filter(id=pk).values()
-                print(obra)
-                print(data.get('pais'))
+                # print(obra)
+                # print(data.get('pais'))
                 obra.update(
                     descripcion=data.get('descripcion'),
                     estado=data.get('estado'),
@@ -150,7 +152,7 @@ class eliminar_obra(APIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        print(data)
+        # print(data)
         id_obra = data.get('id')
 
         if not id_obra:
@@ -170,22 +172,19 @@ class crear_avance(APIView):
         lista_avance = []
 
         data = request.data
-
+        # print(data)
         if data.get('descripcion') is None:
-            return Response({'status': 'Debe ingresar una descripcion'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Debe ingresar una descripcion'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            descripcion = data.get('descripcion')
-            observaciones = data.get('observaciones')
-            notas_voz = data.get('notas_voz')
-
             new_avance = Avance(
-                descripcion=descripcion,
-                observaciones=observaciones,
-                notas_voz=notas_voz,
+                descripcion=data.get('descripcion'),
+                observaciones=data.get('observaciones'),
+                notas_voz=data.get('notas_voz'),
+                is_active=data.get('is_active'),
             )
             lista_avance.append(new_avance)
             Avance.objects.bulk_create(lista_avance)
-            return Response({'status': 'Avance creado'}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'Avance creado'}, status=status.HTTP_201_CREATED)
 
 
 class listar_avances(APIView):
@@ -248,7 +247,7 @@ class crear_tarea(APIView):
         lista_tarea = []
 
         data = request.data
-
+        # # print(data)
         if data.get('descripcion') is None:
             return Response({'status': 'Debe ingresar una descripcion'}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -256,7 +255,7 @@ class crear_tarea(APIView):
             estado = data.get('estado')
             usuarios_asignados = data.get('usuarios_asignados')
             id_usuario_capataz = Persona.objects.get(
-                id=data.get('id_usuario_capataz'))
+                id_usuario=data.get('id_usuario_capataz'))
             id_obra = Obra.objects.get(id=data.get('id_obra'))
             id_avance = Avance.objects.get(id=data.get('id_avance'))
 
