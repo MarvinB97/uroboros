@@ -16,6 +16,9 @@ class Avance(models.Model):
     # notas_voz = models.FileField(upload_to='notas_voz/', null=True, blank=True)
     notas_voz = models.CharField(max_length=50, default=None)
     is_active = models.BooleanField(default=True)
+    # fecha_registro = models.DateTimeField(auto_now_add=True)
+    # fotos = models.FileField(upload_to='fotos/', null=True, blank=True)
+    # porcentaje = models.IntegerField()
 
     class Meta:
         db_table = 'avance'
@@ -57,8 +60,8 @@ class Tarea (models.Model):
     class Meta:
         db_table = 'tarea'
 
-    def __str__(self):
-        return self.nombre
+    # def __str__(self):
+    #     return self.nombre
 
 
 class Persona_tarea(models.Model):
