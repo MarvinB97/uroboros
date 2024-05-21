@@ -58,7 +58,7 @@ function Formulario() {
         setUsers(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   }, []);
 
@@ -66,9 +66,9 @@ function Formulario() {
     const { name, value } = e.target;
     let usuario_asignado = "";
     for (let i = 0; i < users.length; i++) {
-      //   console.log(users[i].id);
+      //   // console.log(users[i].id);
       if (users[i].id == value) {
-        // console.log(users[i].username);
+        // // console.log(users[i].username);
         usuario_asignado = users[i].username;
       }
     }
@@ -91,11 +91,15 @@ function Formulario() {
     }));
   };
 
+  const handleCrearTareas = () => {
+    navigate("/crear_tareas");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const url = "http://localhost:8000/crear_obra";
     const data = formData;
-    // console.log("Datos a enviar:", data);
+    // // console.log("Datos a enviar:", data);
 
     if (
       data.descripcion === "" ||
@@ -116,14 +120,14 @@ function Formulario() {
       axios
         .post(url, data)
         .then((response) => {
-          // console.log("Respuesta del servidor:", response);
+          // // console.log("Respuesta del servidor:", response);
           // setWebResponse(response);
           if (
             response.request.status === 201 &&
             response.request.statusText === "Created"
           ) {
             // Usuario autenticado, puedes redirigirlo a otra página o mostrar un mensaje de éxito
-            // // // console.log("Usuario autenticado:", response.data.user.username);
+            // // // // console.log("Usuario autenticado:", response.data.user.username);
 
             // Redirige a la pantalla de bienvenida después del inicio de sesión
             setError(response.data.message);
@@ -133,17 +137,17 @@ function Formulario() {
           }
         })
         .catch((error) => {
-          // console.log("Error al iniciar sesión:", error);
+          // // console.log("Error al iniciar sesión:", error);
           // setWebError(error);
           setError(error.response.data.message);
         });
     }
 
     // Aquí puedes enviar los datos del formulario a tu servidor
-    // console.log(formData);
+    // // console.log(formData);
   };
-  console.log(formData);
-  console.log(users);
+  // console.log(formData);
+  // console.log(users);
   return (
     <Form>
       <Row>
@@ -324,9 +328,29 @@ function Formulario() {
           Autorizo el tratamiento de datos
         </Label> */}
       {/* </FormGroup> */}
-      <Button color="primary" onClick={handleSubmit}>
-        Crear
-      </Button>
+      <Col
+        md={12}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Row>
+          <Col md={12} style={{ display: "flex", justifyContent: "center" }}>
+            <Row style={{ width: "30vw", justifyContent: "center" }}>
+              <Col md={4}>
+                <Button color="primary" onClick={handleSubmit}>
+                  Crear
+                </Button>
+              </Col>
+              <Col md={4}>
+                <Button onClick={handleCrearTareas}>Crear Tareas</Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Col>
       <br></br>
       {error && <p>{error}</p>}
     </Form>
