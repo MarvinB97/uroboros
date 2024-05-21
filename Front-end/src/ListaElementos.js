@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 let estilo_button_Editar = {
@@ -33,98 +33,77 @@ let estilo_button_Add = {
   padding: "2px",
   marginRigth: "10%",
   TextAlign: "center",
-  
 };
 
-class ListaElementos extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: null,
-    };
+const ListaElementos = (navigate_data) => {
+  console.log(navigate_data);
+  const [state, setState] = useState({ usuario: [] });
+  // useEffect(() => {
+  //   axios
+  //     .post("http://localhost:8000/listar_usuarios")
+  //     .then((response) => {
+  //       setState({
+  //         data: response.data,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
 
-    // this.state = {
-    //   items: [], // Almacenará los elementos
-    //   currentItem: "", // El elemento actual que se está editando o agregando
-    // };
-  }
-
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  fetchData = async () => {
-    const url = "http://localhost:8000/listar_usuarios";
-    try {
-      const response = await axios.post(url);
-
-      this.setState({
-        data: response.data,
-      });
-      // // console.log(response.data);
-    } catch (error) {}
+  const navigate = useNavigate();
+  const actualizarObras = () => {
+    navigate("/actualizar-obras");
   };
 
-  // Maneja el cambio en el formulario de entrada
-  handleInputChange = (event) => {
-    this.setState({ currentItem: event.target.value });
-  };
+  // Función para añadir un nuevo elemento a la lista
+  const handleAddElement = (e) => {
+    // Verifica que el nuevo elemento no esté vacío
 
-  // Maneja la adición de un nuevo elemento
-  addItem = () => {
-    const { navigate } = this.props;
-    // console.log(this.props);
-    if (this.props.navigate.origin === "obras") {
-      // navigate.navigate("");
-    } else if (this.props.navigate.origin === "crear_usuarios") {
-      navigate.navigate("/signin");
+    if (navigate_data.navigate.origin === "crear_usuarios") {
+      navigate("/signin");
+    } else if (navigate_data.navigate.origin === "crear_obras") {
+      console.log(e.target);
+      navigate("/crear_obras");
     }
-    // if (this.state.currentItem !== '') {
-    //   this.setState({
-    //     items: [...this.state.items, this.state.currentItem],
-    //     currentItem: '',
-    //   });
-    // }
   };
 
-  // Maneja la eliminación de un elemento
-  deleteItem = (index) => {
-    const newItems = [...this.state.items];
-    newItems.splice(index, 1);
-    this.setState({ items: newItems });
-  };
+  // Función para borrar un elemento de la lista
+  // const handleDeleteElement = (index) => {
+  //   // Crea una nueva lista sin el elemento a eliminar
+  //   const nuevaLista = lista.filter((_, i) => i !== index);
+  //   setLista(nuevaLista);
+  // };
 
-  render() {
-    return (
-      <>
-        <ol>
-          {/* {data.map((item, index) => (
-            <li key={index} style={estilo_li}>
-              <p>
-                {item} {index + 1}
-                <button
-                  style={estilo_button_Eliminar}
-                  onClick={() => this.deleteItem(index)}
-                >
-                  🗑️
-                </button>
-                <button style={estilo_button_Editar}>{"\u270E"}</button>
-              </p>
-            </li>
-          ))} */}
-        </ol>
-        {/* <input
-          type="text"
-          placeholder="Ingrese un elemento"
-          value={this.state.currentItem}
-          onChange={this.handleInputChange}
-        /> */}
-        <button onClick={this.addItem} style={estilo_button_Add}>
-          Agregar
-        </button>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      {/* <ul>
+        {lista.map((elemento, index) => (
+          <li key={index} style={estilo_li}>
+            <p>
+              {index + 1} {elemento}
+              <button
+                style={estilo_button_Eliminar}
+                onClick={() => handleDeleteElement(index)}
+              >
+                🗑️
+              </button>
+              <button
+                style={estilo_button_Editar}
+                onClick={() => actualizarObras()}
+              >
+                {"\u270E"}
+              </button>
+            </p>
+          </li>
+        ))}
+      </ul> */}
+      <br></br>
+      <button onClick={(e) => handleAddElement(e)} style={estilo_button_Add}>
+        Agregar
+      </button>
+    </>
+  );
+};
 
 export default ListaElementos;
