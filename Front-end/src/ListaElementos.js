@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 let estilo_button_Editar = {
@@ -33,61 +33,77 @@ let estilo_button_Add = {
   padding: "2px",
   marginRigth: "10%",
   TextAlign: "center",
-  
 };
 
-const ListaElementos = () => {
+const ListaElementos = (navigate_data) => {
+  console.log(navigate_data);
+  const [state, setState] = useState({ usuario: [] });
+  // useEffect(() => {
+  //   axios
+  //     .post("http://localhost:8000/listar_usuarios")
+  //     .then((response) => {
+  //       setState({
+  //         data: response.data,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
   const navigate = useNavigate();
-  const actualizarObras = ()=>{navigate('/actualizar-obras');};
-
-  // Estado para la lista de elementos
-  const [lista, setLista] = useState([]);
-  // Estado para el nuevo elemento
-  const [nuevoElemento, setNuevoElemento] = useState('');
-
-  // Función para manejar el cambio en el input
-  const handleInputChange = (e) => {
-    setNuevoElemento(e.target.value);
+  const actualizarObras = () => {
+    navigate("/actualizar-obras");
   };
 
   // Función para añadir un nuevo elemento a la lista
-  const handleAddElement = () => {
+  const handleAddElement = (e) => {
     // Verifica que el nuevo elemento no esté vacío
-    if (nuevoElemento.trim() !== '') {
-      setLista([...lista, nuevoElemento]);
-      setNuevoElemento(''); // Limpia el input
+
+    if (navigate_data.navigate.origin === "crear_usuarios") {
+      navigate("/signin");
+    } else if (navigate_data.navigate.origin === "crear_obras") {
+      console.log(e.target);
+      navigate("/crear_obras");
     }
   };
 
   // Función para borrar un elemento de la lista
-  const handleDeleteElement = (index) => {
-    // Crea una nueva lista sin el elemento a eliminar
-    const nuevaLista = lista.filter((_, i) => i !== index);
-    setLista(nuevaLista);
-  };
+  // const handleDeleteElement = (index) => {
+  //   // Crea una nueva lista sin el elemento a eliminar
+  //   const nuevaLista = lista.filter((_, i) => i !== index);
+  //   setLista(nuevaLista);
+  // };
 
   return (
     <>
-      <input
-        type="text"
-        value={nuevoElemento}
-        onChange={handleInputChange}
-        placeholder="Ingrese un elemento"
-      />
-      <ul>
+      {/* <ul>
         {lista.map((elemento, index) => (
           <li key={index} style={estilo_li}>
-              <p>{index+1}  {elemento}
-              <button style={estilo_button_Eliminar} onClick={() => handleDeleteElement(index)}>🗑️</button>
-              <button style={estilo_button_Editar} onClick={() =>actualizarObras()}>{'\u270E'}</button></p>
+            <p>
+              {index + 1} {elemento}
+              <button
+                style={estilo_button_Eliminar}
+                onClick={() => handleDeleteElement(index)}
+              >
+                🗑️
+              </button>
+              <button
+                style={estilo_button_Editar}
+                onClick={() => actualizarObras()}
+              >
+                {"\u270E"}
+              </button>
+            </p>
           </li>
         ))}
-      </ul>
-      <button onClick={handleAddElement}style={estilo_button_Add}>Agregar</button>
+      </ul> */}
+      <br></br>
+      <button onClick={(e) => handleAddElement(e)} style={estilo_button_Add}>
+        Agregar
+      </button>
     </>
   );
 };
-
-
 
 export default ListaElementos;

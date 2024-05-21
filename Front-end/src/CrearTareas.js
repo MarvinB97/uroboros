@@ -40,19 +40,22 @@ function Formulario() {
     estado: "",
     usuarios_asignados: "",
     id_usuario_capataz: "",
+    id_obra: "",
+    id_avance: "",
     is_active: true,
-    proveedores: "",
-    pais: "",
-    nit: "",
-    nit_number: "",
-    mes_inicio: "",
-    tipo_pago: "",
-    direccion: "",
-    telefono: "",
+    id_db_capataz: "",
+    new_usuarios_asignados: "",
+    // nit: "",
+    // nit_number: "",
+    // mes_inicio: "",
+    // tipo_pago: "",
+    // direccion: "",
+    // telefono: "",
   });
 
   const [users, setUsers] = useState([]);
   const [obra, setObra] = useState([]);
+  const [Avances, setAvances] = useState([]);
   const { id } = useParams();
   useEffect(() => {
     const url = "http://localhost:8000/listar_usuarios";
@@ -67,26 +70,25 @@ function Formulario() {
   }, []);
 
   useEffect(() => {
-    const url = "http://localhost:8000/listar_obra_especifica/" + id;
+    const url = "http://localhost:8000/listar_obras";
     axios
       .post(url)
       .then((response) => {
         setObra(response.data);
-        setFormData({
-          descripcion: response.data.descripcion,
-          estado: response.data.estado,
-          usuarios_asignados: response.data.usuarios_asignados,
-          id_usuario_capataz: response.data.id_usuario_capataz,
-          is_active: response.data.is_active,
-          proveedores: response.data.proveedores,
-          pais: response.data.pais,
-          nit: response.data.nit,
-          nit_number: response.data.nit_number,
-          mes_inicio: response.data.mes_inicio,
-          tipo_pago: response.data.tipo_pago,
-          direccion: response.data.direccion,
-          telefono: response.data.telefono,
-        });
+        console.log(obra);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const url = "http://localhost:8000/listar_avances";
+    axios
+
+      .post(url)
+      .then((response) => {
+        setAvances(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -95,27 +97,89 @@ function Formulario() {
 
   //   console.log(obra);
   const handleSelect = (e) => {
-    const { name, value } = e.target;
-    let usuario_asignado = "";
-    for (let i = 0; i < users.length; i++) {
-      //   // console.log(users[i].id);
-      if (users[i].id == value) {
-        // // console.log(users[i].username);
-        usuario_asignado = users[i].username;
+    console.log(e.target.value);
+    let selected_obra = [];
+    for (let index = 0; index < obra.length; index++) {
+      const element = obra[index];
+      if (element.id == e.target.value) {
+        selected_obra = element;
       }
     }
     setFormData({
       ...formData,
-      id_usuario_capataz: value,
-      estado: "En Proceso",
-      usuarios_asignados: usuario_asignado,
+      id_usuario_capataz: selected_obra.id_usuario_capataz,
+      //   usuarios_asignados: selected_obra.usuarios_asignados,
     });
+
+    if (selected_obra.id_usuario_capataz) {
+      axios
+        .post(
+          "http://localhost:8000/listar_usuario_persona_obra/" +
+            selected_obra.id_usuario_capataz
+        )
+        .then((response) => {
+          console.log(response);
+          setFormData({
+            ...formData,
+            id_db_capataz: response.data.id,
+            usuarios_asignados: selected_obra.usuarios_asignados,
+          });
+        });
+    }
+
+    // obra.map((obra) => {
+    //   obra = e.target.value;
+    // });
+    // console.log(selected_obra);
+    // const { name, value } = e.target;
+
+    // // console.log(name, value);
+    // let usuario_asignado = "";
+    // for (let i = 0; i < users.length; i++) {
+    //   //   // console.log(users[i].id);
+    //   if (users[i].id == value) {
+    //     // // console.log(users[i].username);
+    //     usuario_asignado = users[i].username;
+    //   }
+    // }
+    // setFormData({
+    //   ...formData,
+    //   id_usuario_capataz: value,
+    // });
   }; // Aquí deberías actualizar el estado de tu formulario con el valor seleccionado
+
+  const handleSelectUser = (e) => {
+    // console.log(e.target.value);
+    const { name, value } = e.target;
+    // console.log(name, value);
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  //   const handleSelectObra = (e) => {
+  //     const { name, value } = e.target;
+  //     let usuario_asignado = "";
+  //     for (let i = 0; i < users.length; i++) {
+  //       //   // console.log(users[i].id);
+  //       if (users[i].id == value) {
+  //         // // console.log(users[i].username);
+  //         usuario_asignado = users[i].username;
+  //       }
+  //     }
+  //     setFormData({
+  //       ...formData,
+  //       id_usuario_capataz: value,
+  //     });
+  //   }; // Aquí deberías actualizar el estado de tu formulario con el valor seleccionado
 
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
+
   const handleChange = (e) => {
+    console.log(e.target);
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -142,21 +206,13 @@ function Formulario() {
     if (
       data.descripcion === "" ||
       data.id_usuario_capataz === "" ||
-      data.proveedores === "" ||
-      data.proveedores === "Sin proveedores" ||
-      data.pais === "" ||
-      data.pais === "Sin pais" ||
-      data.nit === "Seleccione un nit" ||
-      data.nit_number === "" ||
-      data.nit_number === "Sin NIT" ||
-      data.mes_inicio === "Seleccione un mes" ||
-      data.mes_inicio === "Sin mes de inicio" ||
-      data.tipo_pago === "Seleccione un tipo de pago" ||
-      data.tipo_pago === "Sin tipo de pago" ||
-      data.direccion === "" ||
-      data.direccion === "Sin direccion" ||
-      data.telefono === "" ||
-      data.telefono === "Sin telefono"
+      data.estado === "" ||
+      data.usuarios_asignados === "" ||
+      data.id_obra === "" ||
+      data.id_obra === "Seleccione una Obra" ||
+      data.id_avance === "" ||
+      data.id_avance === "Seleccione un Avance" ||
+      data.is_active === ""
     ) {
       setError("Por favor, rellena todos los campos");
       return;
@@ -190,35 +246,38 @@ function Formulario() {
     // Aquí puedes enviar los datos del formulario a tu servidor
     // // console.log(formData);
   };
-  const get_user_charge = (id) => {
-    const url =
-      "http://localhost:8000/listar_usuario_persona_obra/" +
-      formData.id_usuario_capataz;
-    axios
-      .post(url)
-      .then((response) => {
-        setFormData({
-          ...formData,
-          id_usuario_capataz: response.data.id,
-        });
-      })
-      .catch((error) => {
-        // console.log(error);
-      });
-  };
-//   console.log(formData);
+
+  console.log(formData);
+  console.log(obra);
+  console.log(users);
   //   console.log(users);
   return (
     <Form>
       <Row>
         <Col md={6}>
+          <Label for="descripcion">Descripción de la tarea</Label>
+        </Col>
+        <Col md={6}>
+          <Label for="usuario_capataz">Capataz</Label>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6}>
           <FormGroup>
-            <Label for="descripcion">Nombre de Obra</Label>
-            <Input
+            {/* <Input
               id="descripcion"
               name="descripcion"
-              placeholder="Obra"
-              type="text"
+              placeholder="Descripcion"
+              type="textArea"
+              value={formData.descripcion}
+              onChange={handleChange}
+            /> */}
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              placeholder="Descripción"
+              rows="4"
+              cols="30"
               value={formData.descripcion}
               onChange={handleChange}
             />
@@ -226,14 +285,14 @@ function Formulario() {
         </Col>
         <Col md={6}>
           <FormGroup>
-            <Label for="usuario_capataz">Encargado Principal</Label>
             <Input
               id="usuario_capataz"
               name="usuario_capataz"
               type="select"
               style={{ width: "60%", display: "inline" }}
-              //   value)}
-              onChange={(e) => handleSelect(e)}
+              value={formData.id_db_capataz}
+              onChange={(e) => handleSelectUser(e)}
+              disabled
             >
               <option>Seleccione un usuario</option>
               {users.map((user, index) => (
@@ -248,50 +307,56 @@ function Formulario() {
       <Row>
         <Col md={6}>
           <FormGroup>
-            <Label for="proveedores">Proveedores</Label>
+            <Label for="estado">Estado</Label>
             <Input
-              id="proveedores"
-              name="proveedores"
-              placeholder="Nombres"
+              id="estado"
+              name="estado"
+              placeholder="Estado de la Tarea"
               type="text"
-              value={formData.proveedores}
+              value={formData.estado}
               onChange={handleChange}
             />
           </FormGroup>
         </Col>
         <Col md={6}>
           <FormGroup>
-            <Label for="pais">Pais</Label>
+            <Label for="Usuarios Asignados a la Tarea">
+              Usuarios asignados
+            </Label>
             <Input
-              id="pais"
-              name="pais"
-              placeholder="pais"
+              id="usuarios_asignados"
+              name="usuarios_asignados"
+              placeholder="Usuarios Asignados"
               type="text"
-              value={formData.pais}
-              onChange={handleChange}
+              value={formData.usuarios_asignados}
+              //   onChange={handleChange}
             />
           </FormGroup>
         </Col>
       </Row>
       <Row>
-        <Col md={4}>
+        <Col md={6}>
           <FormGroup>
             <Label for="id" style={{ display: "block" }}>
-              NIT
+              Seleccione una obra
             </Label>
             <Input
-              id="nit"
-              name="nit"
+              id="id_obra"
+              name="id_obra"
               type="select"
               style={{ width: "60%", display: "inline" }}
-              value={formData.nit}
-              onChange={handleChange}
+              //   value={formData.id_obra}
+              onChange={(e) => handleSelect(e)}
             >
-              <option>Seleccione un nit</option>
-              <option>NIT</option>
-              <option>OTRO</option>
+              <option>Seleccione una Obra</option>
+              {obra.map((obra, index) => (
+                <option key={index} value={obra.id}>
+                  {obra.id} {obra.descripcion} {obra.id_usuario_capataz}{" "}
+                  {obra.is_active}
+                </option>
+              ))}
             </Input>
-            <Input
+            {/* <Input
               id="nit_number"
               name="nit_number"
               placeholder="Nit"
@@ -300,36 +365,24 @@ function Formulario() {
               style={{ width: "80%", display: "inline" }}
               value={formData.nit_number}
               onChange={handleChange}
-            />
+            /> */}
           </FormGroup>
         </Col>
-        <Col md={4}>
+        <Col md={6}>
           <FormGroup>
-            <Label for="mes_inicio">Mes de Inicio</Label>
+            <Label for="mes_inicio">Seleccione un avance</Label>
             <Input
-              id="mes_inicio"
-              name="mes_inicio"
+              id="id_avance"
+              name="id_avance"
               type="select"
-              value={formData.mes_inicio}
+              value={formData.id_avance}
               onChange={handleChange}
             >
-              <option>Seleccione un mes</option>
-              <option>Ene</option>
-              <option>Feb</option>
-              <option>Mar</option>
-              <option>Abr</option>
-              <option>May</option>
-              <option>Jun</option>
-              <option>Jul</option>
-              <option>Agos</option>
-              <option>Sept</option>
-              <option>Oct</option>
-              <option>Nov</option>
-              <option>Dic</option>
+              <option>Seleccione un Avance</option>
             </Input>
           </FormGroup>
         </Col>
-        <Col md={4}>
+        {/* <Col md={4}>
           <FormGroup>
             <Label for="tipo_pago">Tipo de pago</Label>
             <Input
@@ -344,9 +397,9 @@ function Formulario() {
               <option>Contado</option>
             </Input>
           </FormGroup>
-        </Col>
+        </Col> */}
       </Row>
-      <Row>
+      {/* <Row>
         <Col md={6}>
           <FormGroup>
             <Label for="direccion">Dirección</Label>
@@ -375,7 +428,7 @@ function Formulario() {
             />
           </FormGroup>
         </Col>
-      </Row>
+      </Row> */}
 
       <FormGroup check style={{ margin: "auto" }}>
         <Input
@@ -383,15 +436,15 @@ function Formulario() {
           name="is_active"
           type="checkbox"
           style={{ display: "inline", margin: "2px", float: "none" }}
-          value={formData.is_active}
+          //   value={formData.is_active}
           onChange={(e) => handleCheck(e)}
         />
         <Label check for="exampleCheck">
-          Obra Activa
+          Tarea activa
         </Label>
       </FormGroup>
       <Button color="primary" onClick={handleSubmit}>
-        Actualizar
+        Crear tarea
       </Button>
       <br></br>
       {error && <p>{error}</p>}

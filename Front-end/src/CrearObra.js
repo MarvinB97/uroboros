@@ -5,8 +5,6 @@ import { Button, Form, Row, Col, FormGroup, Label, Input } from "reactstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { useParams } from "react-router-dom";
-
 export default function CrearObra() {
   const navigate = useNavigate();
   const volver = () => {
@@ -52,8 +50,6 @@ function Formulario() {
   });
 
   const [users, setUsers] = useState([]);
-  const [obra, setObra] = useState([]);
-  const { id } = useParams();
   useEffect(() => {
     const url = "http://localhost:8000/listar_usuarios";
     axios
@@ -62,45 +58,17 @@ function Formulario() {
         setUsers(response.data);
       })
       .catch((error) => {
-        // console.log(error);
-      });
-  }, []);
-
-  useEffect(() => {
-    const url = "http://localhost:8000/listar_obra_especifica/" + id;
-    axios
-      .post(url)
-      .then((response) => {
-        setObra(response.data);
-        setFormData({
-          descripcion: response.data.descripcion,
-          estado: response.data.estado,
-          usuarios_asignados: response.data.usuarios_asignados,
-          id_usuario_capataz: response.data.id_usuario_capataz,
-          is_active: response.data.is_active,
-          proveedores: response.data.proveedores,
-          pais: response.data.pais,
-          nit: response.data.nit,
-          nit_number: response.data.nit_number,
-          mes_inicio: response.data.mes_inicio,
-          tipo_pago: response.data.tipo_pago,
-          direccion: response.data.direccion,
-          telefono: response.data.telefono,
-        });
-      })
-      .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  //   console.log(obra);
   const handleSelect = (e) => {
     const { name, value } = e.target;
     let usuario_asignado = "";
     for (let i = 0; i < users.length; i++) {
-      //   // console.log(users[i].id);
+      //   console.log(users[i].id);
       if (users[i].id == value) {
-        // // console.log(users[i].username);
+        // console.log(users[i].username);
         usuario_asignado = users[i].username;
       }
     }
@@ -123,40 +91,23 @@ function Formulario() {
     }));
   };
 
-  const handleCheck = (e) => {
-    // console.log(e.target.checked);
-    const { name, value } = e.target;
-    // console.log(name, value);
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: e.target.checked,
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const url = "http://localhost:8000/editar_obra/" + id;
+    const url = "http://localhost:8000/crear_obra";
     const data = formData;
-    // // console.log("Datos a enviar:", data);
+    // console.log("Datos a enviar:", data);
 
     if (
       data.descripcion === "" ||
       data.id_usuario_capataz === "" ||
       data.proveedores === "" ||
-      data.proveedores === "Sin proveedores" ||
       data.pais === "" ||
-      data.pais === "Sin pais" ||
       data.nit === "Seleccione un nit" ||
       data.nit_number === "" ||
-      data.nit_number === "Sin NIT" ||
       data.mes_inicio === "Seleccione un mes" ||
-      data.mes_inicio === "Sin mes de inicio" ||
       data.tipo_pago === "Seleccione un tipo de pago" ||
-      data.tipo_pago === "Sin tipo de pago" ||
       data.direccion === "" ||
-      data.direccion === "Sin direccion" ||
-      data.telefono === "" ||
-      data.telefono === "Sin telefono"
+      data.telefono === ""
     ) {
       setError("Por favor, rellena todos los campos");
       return;
@@ -165,49 +116,34 @@ function Formulario() {
       axios
         .post(url, data)
         .then((response) => {
-          // // console.log("Respuesta del servidor:", response);
+          // console.log("Respuesta del servidor:", response);
           // setWebResponse(response);
-          console.log(response);
-          if (response.status == 200 && response.statusText == "OK") {
+          if (
+            response.request.status === 201 &&
+            response.request.statusText === "Created"
+          ) {
             // Usuario autenticado, puedes redirigirlo a otra página o mostrar un mensaje de éxito
-            // // // // console.log("Usuario autenticado:", response.data.user.username);
+            // // // console.log("Usuario autenticado:", response.data.user.username);
 
             // Redirige a la pantalla de bienvenida después del inicio de sesión
             setError(response.data.message);
-            console.log(response.data.message);
             setTimeout(() => {
               navigate("/profile");
             }, 1000);
           }
         })
         .catch((error) => {
-          console.log("Error al iniciar sesión:", error);
+          // console.log("Error al iniciar sesión:", error);
           // setWebError(error);
           setError(error.response.data.message);
         });
     }
 
     // Aquí puedes enviar los datos del formulario a tu servidor
-    // // console.log(formData);
+    // console.log(formData);
   };
-  const get_user_charge = (id) => {
-    const url =
-      "http://localhost:8000/listar_usuario_persona_obra/" +
-      formData.id_usuario_capataz;
-    axios
-      .post(url)
-      .then((response) => {
-        setFormData({
-          ...formData,
-          id_usuario_capataz: response.data.id,
-        });
-      })
-      .catch((error) => {
-        // console.log(error);
-      });
-  };
-//   console.log(formData);
-  //   console.log(users);
+  console.log(formData);
+  console.log(users);
   return (
     <Form>
       <Row>
@@ -232,7 +168,7 @@ function Formulario() {
               name="usuario_capataz"
               type="select"
               style={{ width: "60%", display: "inline" }}
-              //   value)}
+              //   value={formData.nit}
               onChange={(e) => handleSelect(e)}
             >
               <option>Seleccione un usuario</option>
@@ -377,21 +313,19 @@ function Formulario() {
         </Col>
       </Row>
 
-      <FormGroup check style={{ margin: "auto" }}>
-        <Input
-          id="is_active"
-          name="is_active"
+      {/* <FormGroup check style={{ margin: "auto" }}> */}
+      {/* <Input
+          id="exampleCheck"
+          name="check"
           type="checkbox"
           style={{ display: "inline", margin: "2px", float: "none" }}
-          value={formData.is_active}
-          onChange={(e) => handleCheck(e)}
-        />
-        <Label check for="exampleCheck">
-          Obra Activa
-        </Label>
-      </FormGroup>
+        /> */}
+      {/* <Label check for="exampleCheck">
+          Autorizo el tratamiento de datos
+        </Label> */}
+      {/* </FormGroup> */}
       <Button color="primary" onClick={handleSubmit}>
-        Actualizar
+        Crear
       </Button>
       <br></br>
       {error && <p>{error}</p>}

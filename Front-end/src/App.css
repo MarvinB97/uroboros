@@ -25,7 +25,7 @@
 }
 
 .flexbox-container-profile div:first-child{
-  width: 30%;
+  width: 50%;
   margin-right: 5%;
 	padding: 0%;
   background: #1653fc;
@@ -33,7 +33,7 @@
 }
 
 .flexbox-container-profile > div{
-  width: 40%;
+  width: 80%;
   margin-right: 5%;
 	padding: 10px;
   background: #ffffff;

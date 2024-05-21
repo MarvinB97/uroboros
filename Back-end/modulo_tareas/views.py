@@ -27,16 +27,17 @@ class crear_obra(APIView):
 
         data = request.data
 
-        if data.get('nombre_obra') is None:
+        if data.get('descripcion') is None:
             return Response({'status': 'Debe ingresar un nombre'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            descripcion = data.get('nombre_obra')
+            descripcion = data.get('descripcion')
 
             # direccion = 'undefined'
             # descripcion = 'undefined'
-            estado = 'undefined'
-            usuarios_asignados = 'undefined'
-            persona = Persona.objects.get(id=2)
+            estado = data.get('estado')
+            usuarios_asignados = data.get('usuarios_asignados')
+            persona = Persona.objects.get(
+                id_usuario=data.get('id_usuario_capataz'))
             new_obra = Obra(
                 descripcion=descripcion,
                 estado=estado,
@@ -45,7 +46,21 @@ class crear_obra(APIView):
             )
             lista_obra.append(new_obra)
             Obra.objects.bulk_create(lista_obra)
-            return Response({'status': 'Obra creada'}, status=status.HTTP_201_CREATED)
+
+        try:
+            print("Persona: ")
+            print(persona)
+            persona_obra = Persona_obra(
+                id_persona=persona,
+                id_obra=new_obra,
+            )
+            lista_obra = []
+            lista_obra.append(persona_obra)
+            Persona_obra.objects.bulk_create(lista_obra)
+        except:
+            return Response({'status': 'No se pudo crear la obra'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'status': 'Obra creada'}, status=status.HTTP_201_CREATED)
 
 
 class listar_obras(APIView):
@@ -58,33 +73,85 @@ class listar_obras(APIView):
         return Response(lista_obra, status=status.HTTP_200_OK)
 
 
+class listar_obra_especifica(APIView):
+
+    def post(self, request, pk, *args, **kwargs):
+        data = request.data
+        print(pk)
+        # id_obra = data.get('id')
+        if not pk:
+            return Response({'status': 'Debe ingresar un id'}, status=status.HTTP_400_BAD_REQUEST)
+        obra = Obra.objects.get(id=pk)
+        return Response(ObraSerializer(obra).data, status=status.HTTP_200_OK)
+
+
+class listar_usuario_persona_obra(APIView):
+
+    def post(self, request, pk, *args, **kwargs):
+        data = request.data
+        # id_obra = data.get('id')
+        if not pk:
+            return Response({'status': 'Debe ingresar un id'}, status=status.HTTP_400_BAD_REQUEST)
+        persona = Persona.objects.filter(id=pk).values()
+        # print("AAAAAAAAHHHH")
+        # print(persona[0]["id_usuario_id"])
+        usuario = User.objects.filter(id=persona[0]["id_usuario_id"])
+        user_serialized = UserSerializer(usuario[0]).data
+        # print("Usuario:")
+        # print(user_serialized)
+        list_user = []
+        data = {
+            "id": user_serialized["id"],
+            "username": user_serialized["username"],
+        }
+        # list_user.append(user_serialized)
+        return Response(data, status=status.HTTP_200_OK)
+
+
 class editar_obra(APIView):
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
         data = request.data
-        id_obra = data.get('id_obra')
+        print(pk)
+        print(data.get('id_usuario_capataz'))
 
         # print(id_obra)
-        if not id_obra:
-            return Response({'status': 'Debe ingresar un id'}, status=status.HTTP_400_BAD_REQUEST)
-
-        obra = Obra.objects.get(id=id_obra)
-        obra.descripcion = data.get('descripcion')
-        obra.estado = data.get('estado')
-        obra.usuarios_asignados = data.get('usuarios_asignados')
-        # recibe un id_persona, no una persona como objeto
-        obra.id_usuario_capataz = Persona.objects.get(
-            id=data.get('id_usuario_capataz'))
-        obra.is_active = data.get('is_active')
-        obra.save()
-        return Response({'status': 'Obra actualizada'}, status=status.HTTP_200_OK)
+        if not pk:
+            return Response({'message': 'Debe ingresar un id'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            try:
+                obra = Obra.objects.filter(id=pk).values()
+                print(obra)
+                print(data.get('pais'))
+                obra.update(
+                    descripcion=data.get('descripcion'),
+                    estado=data.get('estado'),
+                    usuarios_asignados=data.get('usuarios_asignados'),
+                    # recibe un id_persona, no una persona como objeto
+                    id_usuario_capataz=Persona.objects.get(
+                        id_usuario=data.get('id_usuario_capataz')),
+                    is_active=data.get('is_active'),
+                    proveedores=data.get('proveedores'),
+                    pais=data.get('pais'),
+                    nit=data.get('nit'),
+                    nit_number=data.get('nit_number'),
+                    mes_inicio=data.get('mes_inicio'),
+                    tipo_pago=data.get('tipo_pago'),
+                    direccion=data.get('direccion'),
+                    telefono=data.get('telefono'),
+                )
+            except Persona.DoesNotExist:
+                return Response({'message': 'No se pudo actualizar la obra, seleccione un usuario de la lista'}, status=status.HTTP_400_BAD_REQUEST)
+        # obra.save()
+        return Response({'message': 'Obra actualizada'}, status=status.HTTP_200_OK)
 
 
 class eliminar_obra(APIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        id_obra = data.get('id_obra')
+        print(data)
+        id_obra = data.get('id')
 
         if not id_obra:
             return Response({'status': 'Debe ingresar un id'}, status=status.HTTP_400_BAD_REQUEST)
@@ -214,4 +281,3 @@ class listar_tareas(APIView):
         for tarea in tareas:
             lista_tarea.append(TareaSerializer(tarea).data)
         return Response(lista_tarea, status=status.HTTP_200_OK)
-
