@@ -71,7 +71,10 @@ function Formulario() {
     const data = formData;
     // console.log("Datos a enviar:", data);
 
-    if (
+    if (formData.document <= 0 || formData.tel <= 0) {
+      setError("El campo de identificación o teléfono no puede ser menor a 0");
+      return;
+    } else if (
       formData.address === "" ||
       formData.name === "" ||
       formData.lastName === "" ||
@@ -103,6 +106,11 @@ function Formulario() {
 
             // Redirige a la pantalla de bienvenida después del inicio de sesión
             setError(response.data.message);
+            sessionStorage.clear();
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+
             // navigate("/profile");
           }
         })
@@ -202,6 +210,7 @@ function Formulario() {
                 name="document"
                 placeholder="Numero de Identificación"
                 type="number"
+                min={0}
                 style={{ width: "60%", display: "inline" }}
                 value={formData.document}
                 onChange={handleChange}
@@ -273,6 +282,7 @@ function Formulario() {
                 name="tel"
                 placeholder="Numero Telefonico"
                 type="number"
+                min={0}
                 value={formData.tel}
                 onChange={handleChange}
               />
@@ -301,7 +311,7 @@ function Formulario() {
             name="check"
             type="checkbox"
             style={{ display: "", margin: "2px", float: "none", width: "30px" }}
-            value={formData.check===true?true:false}
+            value={formData.check === true ? true : false}
             onChange={() =>
               setFormData((prevState) => ({
                 ...prevState,

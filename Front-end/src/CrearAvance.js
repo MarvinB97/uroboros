@@ -362,7 +362,7 @@ function Formulario() {
         </Label>
       </FormGroup>
       <Button color="primary" onClick={handleSubmit}>
-        Crear tarea
+        Crear avance
       </Button>
       <br></br>
       {error && <p>{error}</p>}
