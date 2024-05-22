@@ -109,10 +109,9 @@ function Formulario() {
 
             // Redirige a la pantalla de bienvenida después del inicio de sesión
             setError(response.data.message);
-            setTimeout(()=> {
-                navigate("/profile");
-               }, 1000);
-            
+            setTimeout(() => {
+              navigate("/profile");
+            }, 1000);
           }
         })
         .catch((error) => {
@@ -211,6 +210,7 @@ function Formulario() {
                 name="document"
                 placeholder="Numero de Identificación"
                 type="number"
+                min={0}
                 style={{ width: "60%", display: "inline" }}
                 value={formData.document}
                 onChange={handleChange}
@@ -276,6 +276,7 @@ function Formulario() {
                 name="tel"
                 placeholder="Numero Telefonico"
                 type="number"
+                min={0}
                 value={formData.tel}
                 onChange={handleChange}
               />

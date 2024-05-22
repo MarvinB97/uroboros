@@ -98,16 +98,18 @@ function Formulario() {
   const handleSelect = (e) => {
     const { name, value } = e.target;
     let usuario_asignado = "";
+    console.log(value);
     for (let i = 0; i < users.length; i++) {
       //   // // console.log(users[i].id);
       if (users[i].id == value) {
-        // // // console.log(users[i].username);
+        console.log(users[i].username);
         usuario_asignado = users[i].username;
       }
     }
     setFormData({
       ...formData,
       id_usuario_capataz: value,
+      id_db_capataz: value,
       estado: "En Proceso",
       usuarios_asignados: usuario_asignado,
     });
@@ -264,7 +266,7 @@ function Formulario() {
         // // console.log(error);
       });
   };
-  // console.log(formData);
+  console.log(formData);
   // console.log(users);
   return (
     <Form>
@@ -296,7 +298,7 @@ function Formulario() {
               <option>Seleccione un usuario</option>
               {users.map((user, index) => (
                 <option key={index} value={user.id}>
-                  {/* {user.id}*/} {user.username}
+                  {user.id} {user.username}
                 </option>
               ))}
             </Input>

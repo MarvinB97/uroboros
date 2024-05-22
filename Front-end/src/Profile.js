@@ -272,8 +272,7 @@ export default function Profile() {
 
                           {rol === "Administrador" ||
                           rol === "Desarrollador" ||
-                          rol === "Gerente" ||
-                          rol === "Director" ? (
+                          rol === "Gerente" ? (
                             <button
                               style={estilo_button_Eliminar}
                               onClick={(e) =>
@@ -289,8 +288,7 @@ export default function Profile() {
                           )}
                           {rol === "Administrador" ||
                           rol === "Desarrollador" ||
-                          rol === "Gerente" ||
-                          rol === "Director" ? (
+                          rol === "Gerente" ? (
                             <button
                               style={estilo_button_Editar}
                               onClick={(e) =>
