@@ -8,10 +8,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usuariosList } from "./UsuariosLista.js"; // Importa el archivo de datos
 import axios from "axios";
-
 import LoginColumnOne from "./LoginColumnOne.js";
 import LoginColumnTwo from "./LoginColumnTwo.js";
 
+import "./css/Login.css";
 export let usu = ""; //variable que guarda el username del usuario que ingresa
 
 //--------------funcion principal-----------------------
@@ -145,8 +145,18 @@ const Form = () => {
             sessionStorage.setItem("email", response.data.user.email);
             document.cookie = `token=${response.data.token}; path=/;`;
             sessionStorage.setItem("token", response.data.token);
-
-            navigate("/profile");
+            let rol = sessionStorage.getItem("rol");
+            setTimeout(() => {
+              if (rol === "Gerente") {
+                navigate("/dashboard_gerente");
+              } else if (rol === "Capataz") {
+                navigate("/dashboard_capataz");
+              } else if (rol === "Director") {
+                navigate("/dashboard_director");
+              } else {
+                navigate("/profile");
+              }
+            }, 300);
           }
         })
         .catch((error) => {
@@ -178,7 +188,7 @@ const Form = () => {
         <button type="submit">Iniciar sesión</button>
       </form>
       <p>
-        <a href='./recuperar-contrasena'>¿Has olvidado tu contraseña?</a>
+        <a href="./recuperar-contrasena">¿Has olvidado tu contraseña?</a>
       </p>
       {/* <button onClick={crearCuenta}>Crear Cuenta</button> */}
       {error && <p>{error}</p>}
