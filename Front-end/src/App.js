@@ -9,6 +9,7 @@ import Actualizar from "./Actualizar.js";
 import ActualizarUsuarioEspecifico from "./ActualizarUsuarioEspecifico.js";
 import AcercaDeNosotros from "./AcercaDeNosotros.js";
 import Signin from "./Signin.js";
+import Graficos from './Graficos';
 
 const App = () => {
   const token = sessionStorage.getItem("token");
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="/actualizar" element={<ProteccionDeRuta><Actualizar /></ProteccionDeRuta>} />
             <Route path="/actualizar_usuario_especifico/:id" element={<ProteccionDeRuta><ActualizarUsuarioEspecifico /></ProteccionDeRuta>} />
             <Route path="/acerca-de-nosotros" element={<ProteccionDeRuta><AcercaDeNosotros /></ProteccionDeRuta>} />
+            <Route path="/graficos" element={<ProteccionDeRuta><Graficos /></ProteccionDeRuta>} />
           </Routes>
       </Router>
     </div>
