@@ -8,10 +8,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usuariosList } from "./UsuariosLista.js"; // Importa el archivo de datos
 import axios from "axios";
-
 import LoginColumnOne from "./LoginColumnOne.js";
 import LoginColumnTwo from "./LoginColumnTwo.js";
-
+import MyForm from "./components/reCaptcha.jsx";
+import ReCAPTCHA from "react-google-recaptcha";
+import "./css/Login.css";
 export let usu = ""; //variable que guarda el username del usuario que ingresa
 
 //--------------funcion principal-----------------------
@@ -50,6 +51,9 @@ const Form = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [recaptchaValue, setRecaptchaValue] = useState(null);
+  const [webResponse, setWebResponse] = useState(null);
+
   // const crearCuenta = ()=>{navigate('/signin')};
 
   usu = username;
@@ -127,6 +131,18 @@ const Form = () => {
                   "document",
                   extra_response.data.user_extra[0].identificacion
                 );
+                let rol = sessionStorage.getItem("rol");
+                setTimeout(() => {
+                  if (rol === "Gerente") {
+                    navigate("/dashboard_gerente");
+                  } else if (rol === "Capataz") {
+                    navigate("/dashboard_capataz");
+                  } else if (rol === "Director") {
+                    navigate("/dashboard_director");
+                  } else {
+                    navigate("/profile");
+                  }
+                }, 100);
                 // sessionStorage.setItem("foto", response.data.user.foto);
                 // // console.log("Usuario autenticado:", response.data.user.username);
               })
@@ -145,8 +161,6 @@ const Form = () => {
             sessionStorage.setItem("email", response.data.user.email);
             document.cookie = `token=${response.data.token}; path=/;`;
             sessionStorage.setItem("token", response.data.token);
-
-            navigate("/profile");
           }
         })
         .catch((error) => {
@@ -158,6 +172,24 @@ const Form = () => {
 
     // Con ésto, se realiza la redireccón dependiendo de la respuesta por parte del servidor
     // Atte: @iMrStevenS2
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log(event);
+
+    if (!recaptchaValue) {
+      alert("Por favor, completa el reCAPTCHA");
+      return;
+    } else {
+      if (webResponse !== true) {
+        alert("Por favor, completa el reCAPTCHA");
+        return;
+      } else {
+        alert("Captcha enviado con éxito");
+        document.getElementById("login_button").disabled = false;
+      }
+    }
   };
 
   return (
@@ -175,10 +207,32 @@ const Form = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Iniciar sesión</button>
+        <button id="login_button" type="submit" disabled>
+          Iniciar sesión
+        </button>
+        <div style={{ alignContent: "center" }}>{/* <MyForm /> */}</div>
+      </form>
+      {/* <MyForm /> */}
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <ReCAPTCHA
+            sitekey="6LcvovYpAAAAAGXuklCSyuhE1_CAmvNLUSd6pm1a"
+            onChange={(value) => (
+              setRecaptchaValue(value), setWebResponse(true)
+            )}
+          />
+        </div>
+        <button type="submit">Verificar</button>
       </form>
       <p>
-        <a href='./recuperar-contrasena'>¿Has olvidado tu contraseña?</a>
+        <a href="./recuperar-contrasena">¿Has olvidado tu contraseña?</a>
       </p>
       {/* <button onClick={crearCuenta}>Crear Cuenta</button> */}
       {error && <p>{error}</p>}

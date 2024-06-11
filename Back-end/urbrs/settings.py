@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'modulo_usuarios',
     'modulo_tareas',
+    'modulo_reportes',
     "corsheaders",
     'rest_framework',
     # 'rest_framework.authtoken',
@@ -66,6 +67,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', '').split(',')
 CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', '').split(',')
 CORS_ORIGIN_WHITELIST = os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', '').split(',')
+
+RECAPTCHA_SECRET_KEY = '6LcvovYpAAAAACERwen8Wt_MdNbFa3ubI7WG4NPx'
 
 TEMPLATES = [
     {

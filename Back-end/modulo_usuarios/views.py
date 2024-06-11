@@ -11,6 +11,12 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 
+import json
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+
 from modulo_usuarios.serializers import UserSerializer, PersonaSerializer, CargoSerializer, Usuario_cargosSerializer, CustomTokenObtainPairSerializer, user_token
 from modulo_usuarios.models import Persona, Cargo, Usuario_cargos
 # Create your views here.
@@ -160,10 +166,10 @@ class actualizar_usuario(APIView):
             try:
                 Persona.objects.filter(
                     id_usuario_id=user.id).exists()
-                
+
                 persona = Persona.objects.filter(
                     id_usuario_id=user.id).values()
-                
+
                 if not persona:
                     try:
                         cargo_user = Cargo.objects.filter(
@@ -217,17 +223,17 @@ class actualizar_usuario(APIView):
                     return Response({"message": "Ocurrió un error con la persona"}, status=status.HTTP_400_BAD_REQUEST)
                 # print("creó la persona")
                 Persona.objects.bulk_create(lista_persona)
-                
+
             try:
                 persona = Persona.objects.filter(
                     id_usuario_id=user.id).values()
                 Usuario_cargos.objects.filter(
                     persona_id=persona[0]['id']).exists()
-                
+
                 cargo = Usuario_cargos.objects.filter(
                     persona_id=persona[0]['id']).values()
                 # print(cargo)
-                
+
                 if not cargo:
                     try:
                         user_persona = User.objects.get(
@@ -235,7 +241,7 @@ class actualizar_usuario(APIView):
                         persona_user = Persona.objects.get(
                             id_usuario_id=user_persona.id)
                         cargo_user = Cargo.objects.filter(
-                        nombre=user_form['selectRol']).values()
+                            nombre=user_form['selectRol']).values()
                         # print(user_persona)
                         # print("Persona")
                         # print(persona_user.id)
@@ -480,3 +486,25 @@ class listar_usuarios(APIView):
 
         # # # print(lista_usuarios)
         return Response(lista_usuarios, status=status.HTTP_200_OK)
+
+@csrf_exempt
+class VerifyRecaptchaView(View):
+    def post(self, request):
+        data = json.loads(request.body)
+        recaptcha_response = data.get('recaptcha')
+
+        if not recaptcha_response:
+            return JsonResponse({'success': False, 'message': 'reCAPTCHA no completado'}, status=400)
+
+        payload = {
+            'secret': settings.RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=payload)
+        result = r.json()
+
+        if result['success']:
+            return JsonResponse({'success': True, 'message': 'Verificación exitosa'})
+        else:
+            return JsonResponse({'success': False, 'message': 'Verificación fallida'}, status=400)

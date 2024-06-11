@@ -1,5 +1,6 @@
 from django.urls import path
 from modulo_usuarios import views
+from .views import VerifyRecaptchaView
 
 urlpatterns = [
     path('login', views.Login.as_view()),
@@ -9,4 +10,5 @@ urlpatterns = [
     path('listar_usuarios', views.listar_usuarios.as_view()),
     path('actualizar_usuario_especifico/<int:pk>', views.actualizar_usuario_especifico.as_view()),
     path('eliminar_usuario/<int:pk>', views.desactivar_usuario.as_view()),
+    path('verify-recaptcha/', views.VerifyRecaptchaView, name='verify-recaptcha'),
 ]

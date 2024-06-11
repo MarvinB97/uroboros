@@ -1,0 +1,10 @@
+
+.main-content {
+  display: flex;
+}
+
+.content {
+  margin-left: 6vw; /* Este margen debe coincidir con el ancho de la sidebar */
+  padding: 20px;
+  width: 94vw;
+}

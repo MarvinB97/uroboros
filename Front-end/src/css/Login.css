@@ -1,0 +1,16 @@
+.flexbox-container {
+  /* height: 45vh; */
+  width: 100vw;
+  height: 90vh;
+  margin-left: -9vw;
+  margin-top: -2vh;
+  /* padding-left: -10vw; */
+  /* padding-top: 1vh; */
+}
+
+.column-three {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
