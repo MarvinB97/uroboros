@@ -12,7 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 
 import json
-import requests
+# import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
@@ -487,24 +487,24 @@ class listar_usuarios(APIView):
         # # # print(lista_usuarios)
         return Response(lista_usuarios, status=status.HTTP_200_OK)
 
-@csrf_exempt
-class VerifyRecaptchaView(View):
-    def post(self, request):
-        data = json.loads(request.body)
-        recaptcha_response = data.get('recaptcha')
+# @csrf_exempt
+# class VerifyRecaptchaView(View):
+#     def post(self, request):
+#         data = json.loads(request.body)
+#         recaptcha_response = data.get('recaptcha')
 
-        if not recaptcha_response:
-            return JsonResponse({'success': False, 'message': 'reCAPTCHA no completado'}, status=400)
+#         if not recaptcha_response:
+#             return JsonResponse({'success': False, 'message': 'reCAPTCHA no completado'}, status=400)
 
-        payload = {
-            'secret': settings.RECAPTCHA_SECRET_KEY,
-            'response': recaptcha_response
-        }
+#         payload = {
+#             'secret': settings.RECAPTCHA_SECRET_KEY,
+#             'response': recaptcha_response
+#         }
 
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=payload)
-        result = r.json()
+#         r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=payload)
+#         result = r.json()
 
-        if result['success']:
-            return JsonResponse({'success': True, 'message': 'Verificación exitosa'})
-        else:
-            return JsonResponse({'success': False, 'message': 'Verificación fallida'}, status=400)
+#         if result['success']:
+#             return JsonResponse({'success': True, 'message': 'Verificación exitosa'})
+#         else:
+#             return JsonResponse({'success': False, 'message': 'Verificación fallida'}, status=400)
