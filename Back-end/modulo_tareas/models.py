@@ -16,6 +16,7 @@ class Avance(models.Model):
     # notas_voz = models.FileField(upload_to='notas_voz/', null=True, blank=True)
     notas_voz = models.CharField(max_length=50, default=None)
     is_active = models.BooleanField(default=True)
+    
     # fecha_registro = models.DateTimeField(auto_now_add=True)
     # fotos = models.FileField(upload_to='fotos/', null=True, blank=True)
     # porcentaje = models.IntegerField()
@@ -32,7 +33,11 @@ class Obra (models.Model):
     estado = models.CharField(max_length=50)
     usuarios_asignados = models.CharField(max_length=50)
     id_usuario_capataz = models.ForeignKey(
-        Persona, on_delete=models.CASCADE, default=None)
+        Persona, on_delete=models.CASCADE, default=None,
+        related_name='obras_como_capataz')
+    id_usuario_encargado = models.ForeignKey(
+        Persona, on_delete=models.CASCADE, default=None,
+        related_name='obras_como_encargado')
     is_active = models.BooleanField(default=True)
     proveedores = models.CharField(max_length=50, default="Sin proveedores")
     pais = models.CharField(max_length=50, default="Sin país")
@@ -83,3 +88,10 @@ class Persona_obra (models.Model):
 
     class Meta:
         db_table = 'persona_obra'
+        
+class Obra_avance (models.Model):
+    id_obra = models.ForeignKey(Obra, on_delete=models.CASCADE)
+    id_avance = models.ForeignKey(Avance, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'obra_avance'

@@ -15,14 +15,60 @@ import {
   Label,
   Input,
   Accordion,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
+
+
 import { useState } from "react";
 import axios from "axios";
 //import { PieChart, Pie } from "recharts";
 
+function Options(props) {
+  const navigate = useNavigate();
+  const cerrarSesion = () => {
+    sessionStorage.clear();
+    navigate("/");
+  };
+  const acercaInf = () => {
+    navigate("/acerca-de-nosotros");
+  };
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
+
+  return (
+    <Dropdown
+      isOpen={dropdownOpen}
+      toggle={toggle}
+      {...props}
+      direction="down"
+      style={{ display: "inline", float: "right" }}
+    >
+      <DropdownToggle caret size="lg" color="primary">
+        Opciones
+      </DropdownToggle>
+      <DropdownMenu>
+        <DropdownItem header>Perfil</DropdownItem>
+        <DropdownItem onClick={acercaInf}>Acerca de nosotros</DropdownItem>
+        <DropdownItem onClick={cerrarSesion}>Cerrar sesión</DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+  );
+}
+
 const DashboardCapataz = () => {
   const navigate = useNavigate();
   const rol = sessionStorage.getItem("rol");
+  const cerrarSesion = () => {
+    sessionStorage.clear();
+    navigate("/");
+  };
+  const acercaInf = () => {
+    navigate("/acerca-de-nosotros");
+  };
   const Perfil = () => {
     navigate("/profile");
     // navigate("/profile");
@@ -58,21 +104,11 @@ const DashboardCapataz = () => {
   ];
   return (
     <>
-      {rol != "Capataz" ? (
+      {rol != "Capataz" ? rol != "Desarrollador" (
         navigate("/profile")
       ) : (
         <>
-          <Encabezado
-            boton={
-              <Button
-                color="primary"
-                onClick={Perfil}
-                style={{ fontSize: "20px", display: "inline", float: "right" }}
-              >
-                Perfi
-              </Button>
-            }
-          />
+          {/* <Encabezado className="Encabezado" boton={<Options />} /> */}
           <div
             style={{
               width: "80vw",

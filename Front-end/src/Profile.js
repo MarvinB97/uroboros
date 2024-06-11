@@ -145,7 +145,7 @@ export default function Profile() {
 
   return (
     <div>
-      <Encabezado className="Encabezado" boton={<Options />} />
+      {/* <Encabezado className="Encabezado" boton={<Options />} /> */}
 
       <div className="flexbox-container-profile">
         <div className="column-one-profile">

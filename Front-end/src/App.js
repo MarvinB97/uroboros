@@ -28,6 +28,10 @@ import DashboardCapataz from "./components/dashboards/dashboardCapataz.jsx";
 import DashboardGerente from "./components/dashboards/dashboardGerente.jsx";
 import DashboardDirector from "./components/dashboards/dashboardDirector.jsx";
 
+import ReporteCapataz from "./components/reportes/reporteCapataz.jsx";
+import ReporteDirector from "./components/reportes/reporteDirector.jsx";
+import ReporteGerente from "./components/reportes/reporteGerente.jsx";
+
 import Sidebar from "./modulos/sideBar.jsx";
 import Navbar from "./modulos/NavBar.jsx";
 
@@ -55,19 +59,7 @@ const MainLayout = () => {
         <Routes>
           <Route
             path="/"
-            element={
-              <Navigate
-                to={
-                  autenticado
-                    ? "/dashboard_capataz"
-                    : autenticado && rol == "Gerente"
-                    ? "/dashboard_gerente"
-                    : autenticado && rol == "Director de Obra"
-                    ? "/dashboard_director"
-                    : "/login"
-                }
-              />
-            }
+            element={<Navigate to={autenticado ? "/" : "/login"} />}
           />
           <Route path="/login" element={<Login />} />
           <Route
@@ -99,6 +91,30 @@ const MainLayout = () => {
             element={
               <ProteccionDeRuta>
                 <DashboardDirector />
+              </ProteccionDeRuta>
+            }
+          />
+          <Route
+            path="/reporte_capataz"
+            element={
+              <ProteccionDeRuta>
+                <ReporteCapataz />
+              </ProteccionDeRuta>
+            }
+          />
+          <Route
+            path="/reporte_director"
+            element={
+              <ProteccionDeRuta>
+                <ReporteDirector />
+              </ProteccionDeRuta>
+            }
+          />
+          <Route
+            path="/reporte_gerente"
+            element={
+              <ProteccionDeRuta>
+                <ReporteGerente />
               </ProteccionDeRuta>
             }
           />

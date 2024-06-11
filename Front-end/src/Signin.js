@@ -12,7 +12,7 @@ export default function Signin() {
 
   return (
     <>
-      <Encabezado
+      {/* <Encabezado
         boton={
           <Button
             color="primary"
@@ -22,7 +22,7 @@ export default function Signin() {
             volver
           </Button>
         }
-      />
+      /> */}
 
       <div
         style={{

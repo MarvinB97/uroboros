@@ -12,7 +12,7 @@ export default function RetrievePassword(){
 
     return (
         <>
-        <Encabezado boton={<Button color='primary' onClick={volver} style={{fontSize: '20px', display: 'inline', float: 'right'}}>volver</Button>}/>
+        {/* <Encabezado boton={<Button color='primary' onClick={volver} style={{fontSize: '20px', display: 'inline', float: 'right'}}>volver</Button>}/> */}
         <hr/>
         <div style={{width:'80vw',margin:'auto'}}>
           <Panel/>

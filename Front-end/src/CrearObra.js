@@ -13,7 +13,7 @@ export default function CrearObra() {
 
   return (
     <>
-      <Encabezado
+      {/* <Encabezado
         boton={
           <Button
             color="primary"
@@ -23,7 +23,7 @@ export default function CrearObra() {
             volver
           </Button>
         }
-      />
+      /> */}
 
       <div style={{ width: "80vw", margin: "auto", marginTop: "30px" }}>
         <Formulario />
@@ -37,6 +37,7 @@ function Formulario() {
     descripcion: "",
     estado: "",
     usuarios_asignados: "",
+    id_usuario_director: "",
     id_usuario_capataz: "",
     is_active: true,
     proveedores: "",
@@ -79,6 +80,14 @@ function Formulario() {
       usuarios_asignados: usuario_asignado,
     });
   }; // Aquí deberías actualizar el estado de tu formulario con el valor seleccionado
+  const handleSelect2 = (e) => {
+    const { name, value } = e.target;
+    console.log(e);
+    setFormData({
+      ...formData,
+      id_usuario_director: value,
+    });
+  }; // Aquí deberías actualizar el estado de tu formulario con el valor seleccionado
 
   const navigate = useNavigate();
 
@@ -104,6 +113,7 @@ function Formulario() {
     if (
       data.descripcion === "" ||
       data.id_usuario_capataz === "" ||
+      data.id_usuario_director === "" ||
       data.proveedores === "" ||
       data.pais === "" ||
       data.nit === "Seleccione un nit" ||
@@ -146,7 +156,7 @@ function Formulario() {
     // Aquí puedes enviar los datos del formulario a tu servidor
     // // console.log(formData);
   };
-  // console.log(formData);
+  console.log(formData);
   // console.log(users);
   return (
     <Form>
@@ -165,8 +175,31 @@ function Formulario() {
           </FormGroup>
         </Col>
         <Col md={6}>
+          <Row>
+            <FormGroup>
+              <Label for="usuario_director">Director Encargado</Label>
+              <Input
+                id="usuario_director"
+                name="usuario_director"
+                type="select"
+                style={{ width: "60%", display: "inline" }}
+                //   value={formData.nit}
+                onChange={(e) => handleSelect2(e)}
+              >
+                {console.log(users.filter((user) => user.cargo === "Director"))}
+                <option>Seleccione un usuario</option>
+                {users
+                  .filter((user) => user.cargo === "Director")
+                  .map((user, index) => (
+                    <option key={index} value={user.id}>
+                      {user.username}
+                    </option>
+                  ))}
+              </Input>
+            </FormGroup>
+          </Row>
           <FormGroup>
-            <Label for="usuario_capataz">Encargado Principal</Label>
+            <Label for="usuario_capataz">Capataz Encargado</Label>
             <Input
               id="usuario_capataz"
               name="usuario_capataz"
@@ -176,11 +209,13 @@ function Formulario() {
               onChange={(e) => handleSelect(e)}
             >
               <option>Seleccione un usuario</option>
-              {users.map((user, index) => (
-                <option key={index} value={user.id}>
-                  {user.username}
-                </option>
-              ))}
+              {users
+                .filter((user) => user.cargo === "Capataz")
+                .map((user, index) => (
+                  <option key={index} value={user.id}>
+                    {user.username}
+                  </option>
+                ))}
             </Input>
           </FormGroup>
         </Col>
