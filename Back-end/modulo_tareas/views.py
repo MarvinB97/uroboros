@@ -26,7 +26,7 @@ class crear_obra(APIView):
         lista_obra = []
 
         data = request.data
-
+        print(data)
         if data.get('descripcion') is None:
             return Response({'status': 'Debe ingresar un nombre'}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -38,11 +38,16 @@ class crear_obra(APIView):
             usuarios_asignados = data.get('usuarios_asignados')
             persona = Persona.objects.get(
                 id_usuario=data.get('id_usuario_capataz'))
+            print(persona)
+            encargado = Persona.objects.get(
+                id_usuario=data.get('id_usuario_director'))
+            print(encargado)
             new_obra = Obra(
                 descripcion=descripcion,
                 estado=estado,
                 usuarios_asignados=usuarios_asignados,
                 id_usuario_capataz=persona,
+                id_usuario_encargado=encargado,
             )
             lista_obra.append(new_obra)
             Obra.objects.bulk_create(lista_obra)
@@ -54,8 +59,13 @@ class crear_obra(APIView):
                 id_persona=persona,
                 id_obra=new_obra,
             )
+            persona_obra_director = Persona_obra(
+                id_persona = encargado,
+                id_obra = new_obra,
+            )
             lista_obra = []
             lista_obra.append(persona_obra)
+            lista_obra.append(persona_obra_director)
             Persona_obra.objects.bulk_create(lista_obra)
         except:
             return Response({'status': 'No se pudo crear la obra'}, status=status.HTTP_400_BAD_REQUEST)

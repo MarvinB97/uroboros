@@ -13,7 +13,7 @@ export default function Actualizar() {
 
   return (
     <>
-      <Encabezado
+      {/* <Encabezado
         boton={
           <Button
             color="primary"
@@ -23,7 +23,7 @@ export default function Actualizar() {
             volver
           </Button>
         }
-      />
+      /> */}
 
       <div style={{ width: "80vw", margin: "auto", marginTop: "30px" }}>
         <Formulario />

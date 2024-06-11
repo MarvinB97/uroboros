@@ -42,6 +42,26 @@ const Sidebar = () => {
             Profile
           </Link>
         </li>
+
+        {rol === "Director" ? (
+          <li>
+            <Link to="/obras" className="button-link">
+              Reportes
+            </Link>
+          </li>
+        ) : rol === "Gerente" ? (
+          <li>
+            <Link to="/obras" className="button-link">
+              Reportes
+            </Link>
+          </li>
+        ) : rol === "Capataz" ? (
+          <li>
+            <Link to="/reporte_capataz" className="button-link">
+              Reportes
+            </Link>
+          </li>
+        ) : null}
         {/* Agrega más enlaces según sea necesario */}
       </ul>
     </div>

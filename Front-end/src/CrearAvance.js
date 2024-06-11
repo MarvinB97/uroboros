@@ -15,7 +15,7 @@ export default function CrearObra() {
 
   return (
     <>
-      <Encabezado
+      {/* <Encabezado
         boton={
           <Button
             color="primary"
@@ -25,7 +25,7 @@ export default function CrearObra() {
             volver
           </Button>
         }
-      />
+      /> */}
 
       <div style={{ width: "80vw", margin: "auto", marginTop: "30px" }}>
         <Formulario />
