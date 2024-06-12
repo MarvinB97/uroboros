@@ -20,8 +20,9 @@ from django.urls import path, include
 # from modulo_usuarios.views import saludo
 
 urlpatterns = [
-    path('admin/', admin.site.urls), 
-    path('', include('modulo_usuarios.urls')),
-    path('', include('modulo_tareas.urls')),
-    path('', include('modulo_reportes.urls')),
+    path('admin/', admin.site.urls),
+    path('usuarios/', include('modulo_usuarios.urls')),  # Prefijos para cada módulo
+    path('tareas/', include('modulo_tareas.urls')),
+    path('reportes/', include('modulo_reportes.urls')),
+    path('', include('modulo_usuarios.urls')),  # Asumiendo que `modulo_usuarios` maneja la raíz
 ]
